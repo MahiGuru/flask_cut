@@ -1,0 +1,26 @@
+{% extends "base.html" %} {% block content %}
+
+<p>
+    <a href="/">Back to Home</a>
+</p>
+<h4>FRONT VIEW TYPES</h4>
+<form action="/frontviewtype" method="POST">
+    <select name="category">
+            {% for t in categorys %}
+            <option value="{{ t._id }}">{{ t.name }}</option>
+            {% endfor %}
+        </select>
+    <input type="text" name="name" />
+    <input type="text" name="description" />
+    <input type="submit" />
+</form>
+
+
+<div class="frontTypes">
+    {% for frontType in frontTypes %}
+    <h1> {{ frontType.name }} </h1>
+    <p> {{ frontType.description }} </p>
+    {% endfor %}
+</div>
+
+{% endblock %}

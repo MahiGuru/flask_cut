@@ -1,0 +1,19 @@
+{% extends "base.html" %} {% block content %}
+
+<p>
+    <a href="/">Back to Home</a>
+</p>
+<h4>Category</h4>
+<form action="/category" method="POST">
+    <input type="text" name="name" />
+    <input type="text" name="description" />
+    <input type="submit" />
+</form>
+<div class="category">
+    {% for category in categorys %}
+    <h1> {{ category.name }} </h1>
+    <p> {{ category.description }} </p>
+    {% endfor %}
+</div>
+
+{% endblock %}
