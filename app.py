@@ -1,18 +1,22 @@
 import os
 
-from flask import Flask, redirect, render_template, request, url_for, session
-from pymongo.write_concern import WriteConcern
+from flask import Flask, redirect, render_template, request, url_for, session, flash
 from bson.objectid import ObjectId
 from pymongo import MongoClient
-from utils.common_def import alreadyExists
-
-from models import Category, FrontViewType
-
 import pprint
+from datetime import datetime
+from utils.common_def import alreadyExists, allowed_file
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
-# Connect to MongoDB and call the connection "my-app".
+
+#image info
+app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
+app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+
+
 # connect("mongodb://192.168.99.100:27017/flaskCut", alias="flask-cut-db")
 # connect("mongodb://mongo:27017/flaskCut", alias="flask-cut-db")
 
@@ -30,35 +34,43 @@ backViewTypes = db.backViewType
 def todo():
     return render_template('index.html')
 
+def upload_file(filer,name):
+    print(filer)
+    if filer.filename == '':
+        flash('No selected file')
+        return redirect(request.url)
+    if filer and allowed_file(filer.filename):
+        # d = datetime.date.today()
+        # filename = secure_filename('_cat_'+id+'_'+str(datetime.now().strftime('%Y_%m_%d')) +'.'+filer.filename.rsplit('.', 1)[1])
+        filer.save(os.path.join(app.config['UPLOAD_FOLDER'], name))
+
 @app.route('/category', methods=['POST', 'GET'])
 def category():
-    # Category(
-    #     name=request.form['name'],
-    #     description=request.form['description']
-    # ).save(force_insert=True)
-    # Category(
-    #     name='Electronics',
-    #     description='All electronic products'
-    # ).save(force_insert=True)
-    # _categorys = Category.objects.all()
     if request.method == "POST":
         category = {
             'title': request.form['title'],
             'desc': request.form['desc']
         }
+        insertedId= ''
+        if 'images' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
         checkExists = alreadyExists(categorys, request.form['title'])
-        print("\n\n\n")
-
-        print(checkExists)
-
-        print("\n\n\n")
         if checkExists:
             print("Ooops you entered with same name")
         else: 
             print("still called")
-            categorys.insert_one(category)
-
+            insertedId = categorys.insert_one(category).inserted_id
+            print("\n\n\n\n")
+            print(insertedId)
+        for index, filer in enumerate(request.files.getlist("images")):
+            print(str(insertedId))
+            filename = str(index)+'_cat_'+str(insertedId)+'.'+filer.filename.rsplit('.', 1)[1]
+            print(filename)
+            upload_file(filer, filename)
         return redirect(url_for('category'))
+
+
     elif request.method == "GET":
         myArr = []
         for record in categorys.find():
@@ -77,11 +89,13 @@ def frontviewtype():
     #     category=category_id
     # ).save(force_insert=True)
     # return redirect(url_for('todo'))
-    _categorys = Category.objects.all()
-    categorys = [item for item in _categorys]
-    _frontTypes = FrontViewType.objects.all()
-    frontTypes = [item for item in _frontTypes]
+    # _categorys = Category.objects.all()
+    # categorys = [item for item in _categorys]
+    # _frontTypes = FrontViewType.objects.all()
+    # frontTypes = [item for item in _frontTypes]
     # return redirect(url_for('todo'))
+    categorys = []
+    frontTypes = []
     return render_template('frontTypes.html', categorys=categorys, frontTypes=frontTypes)
 
 
