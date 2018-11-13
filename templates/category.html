@@ -3,16 +3,16 @@
 <p>
     <a href="/">Back to Home</a>
 </p>
-<h4>Category</h4>
+<h4>Category 234</h4>
 <form action="/category" method="POST">
-    <input type="text" name="name" />
-    <input type="text" name="description" />
+    <input type="text" name="title" />
+    <input type="text" name="desc" />
     <input type="submit" />
 </form>
 <div class="category">
     {% for category in categorys %}
-    <h1> {{ category.name }} </h1>
-    <p> {{ category.description }} </p>
+    <h1> {{ category.name }} {{ category.title }} </h1>
+    <p> {{ category.description }} {{ category.desc }} </p>
     {% endfor %}
 </div>
 
