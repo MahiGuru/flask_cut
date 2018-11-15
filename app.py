@@ -1,13 +1,13 @@
-from utils.common_def import alreadyExists, allowed_file
+from utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
 import os
 
-from flask import Flask, redirect, render_template, request, url_for, session, flash
+from flask import Flask, redirect, render_template, request, url_for, session, flash, send_from_directory
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 import pprint
 from datetime import datetime
 from werkzeug.utils import secure_filename
-import pathlib
+from pathlib import Path
 import shutil
 
 app = Flask(__name__)
@@ -39,50 +39,33 @@ backViewTypes = db.backViewType
 def todo():
     return render_template('index.html')
 
-
-@app.route('/upload_file')
-def upload_file():
-    messages = request.args['messages']  # counterpart for url_for()
-    f = request.files['the_file']
-    f.save('/path/to/save/the_file.txt')
+# IMAGE Display Route @ UI
+@app.route('/<path:filename>')  
+def send_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER']+'/', filename)
 
 
 @app.route('/category', methods=['POST', 'GET'])
 def category():
     if request.method == "POST":
-
-        insertedId = ''
         if 'images' not in request.files:
             flash('No file part')
             return redirect(request.url)
+        category_folder = os.path.join(app.config['UPLOAD_FOLDER'], 'category')
+        '' if os.path.exists(category_folder) else os.makedirs(category_folder)
+
+        fileNamesArr = upload_file(request.files.getlist("images"), category_folder, 'cat')
         checkExists = alreadyExists(categorys, request.form['title'])
         if checkExists:
             print("Ooops you entered with same name")
         else:
-            file111 = [
-                file.filename for file in request.files.getlist("images")]
             category = {
                 'title': request.form['title'],
-                'desc': request.form['desc']
+                'desc': request.form['desc'],
+                'img': fileNamesArr
             }
             insertedId = categorys.insert_one(category).inserted_id
-
-        os.makedirs(os.path.join(
-            app.config['UPLOAD_FOLDER']+'/'+str(insertedId)))
-        # pathlib.Path(os.path.join(app.config['UPLOAD_FOLDER']+'/'+str(insertedId))).mkdir(parents=True, exist_ok=True)
-        fileNamesArr = []
-
-        for index, filer in enumerate(request.files.getlist("images")):
-            id = str(insertedId)
-            filename = secure_filename(
-                str(index)+'_cat_'+id + '.'+filer.filename.rsplit('.', 1)[1])
-            fileNamesArr.append(filename)
-            if filer and allowed_file(filer.filename):
-                filer.save(os.path.join(
-                    app.config['UPLOAD_FOLDER']+'/'+id, filename))
-
-        categorys.find_one_and_update(
-            {'_id': insertedId}, {'$inc': {'count': 1}, '$set': {'files': fileNamesArr}})
+            moved_file(fileNamesArr, category_folder, str(insertedId))
         return redirect(url_for('category'))
 
     elif request.method == "GET":

@@ -17,7 +17,7 @@
     {% for category in categorys %}
     <h1> {{ category.name }} {{ category.title }} </h1>
     <p> {{ category.description }} {{ category.desc }} </p>
-    {% endfor %}
+    {% for img in category.img %}
+    <img src="/category/{{category._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %} {% endfor %}
 </div>
-
 {% endblock %}
