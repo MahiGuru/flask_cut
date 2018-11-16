@@ -2,5 +2,6 @@
     "gotoSymbolStack.currentStackPosition": 0,
     "gotoSymbolStack.maxStackPosition": 0,
     "gotoSymbolStack.filePositionInfo": [],
-    "python.pythonPath": "C:\\Users\\mbgurj\\.virtualenvs\\flask_cut-e9G2HeAh\\Scripts\\python.exe"
+    "python.pythonPath": "C:\\Users\\mbgurj\\.virtualenvs\\flask_cut-e9G2HeAh\\Scripts\\python.exe",
+    "python.formatting.provider": "black"
 }
