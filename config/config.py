@@ -1,4 +1,6 @@
-DEBUG = True  # Turns on debugging features in Flask
+DEBUG = True
+DEVELOPMENT = True
+ENV= 'development'
 BCRYPT_LOG_ROUNDS = 12  # Configuration for the Flask-Bcrypt extension
 MAIL_FROM_EMAIL = "mahi6535@gmail.com"  # For use in application emails
 
