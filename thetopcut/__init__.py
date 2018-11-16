@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, send_from_directory
 import pprint
 
 def create_app(test_config=None):
@@ -18,10 +18,17 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass 
-    # a simple page that says hello
-    @app.route('/hello')
-    def hello():
-        pprint.pprint(app.config)
-        return 'Hello, 23322!'
+    from thetopcut.db import db
+    print('\n\n\n\n')
+    print(db.category.find())
+    
+    from thetopcut.categorys import categorys
+    app.register_blueprint(categorys)
+    
+    # IMAGE Display Route @ UI
+    @app.route('/<path:filename>')  
+    def send_file(filename):
+        return send_from_directory(app.config['UPLOAD_FOLDER']+'/', filename)
+
 
     return app
