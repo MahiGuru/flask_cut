@@ -22,7 +22,7 @@ def create_app(test_config=None):
     # print('\n\n\n\n')
     # print(db.category.find())
     from thetopcut.apis.groups_api import groups
-    from thetopcut.ui_views.category_ui import category_ui
+    from thetopcut.views.ui_views.category_ui import category_ui
     # from thetopcut.groups_api import groups
     app.register_blueprint(groups)
     app.register_blueprint(category_ui)
