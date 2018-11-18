@@ -21,14 +21,16 @@ def create_app(test_config=None):
     # from thetopcut.db import db
     # print('\n\n\n\n')
     # print(db.category.find())
-    
-    from thetopcut.categorys import categorys
-    app.register_blueprint(categorys)
+    from thetopcut.apis.groups_api import groups
+    from thetopcut.ui_views.category_ui import category_ui
+    # from thetopcut.groups_api import groups
+    app.register_blueprint(groups)
+    app.register_blueprint(category_ui)
     
     # IMAGE Display Route @ UI
     @app.route('/<path:filename>')  
     def send_file(filename):
         return send_from_directory(app.config['UPLOAD_FOLDER']+'/', filename)
-
+    
 
     return app

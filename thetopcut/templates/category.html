@@ -4,7 +4,7 @@
     <a href="/">Back to Home</a>
 </p>
 <h4>Test</h4>
-<form action="/category/index" method="POST" enctype="multipart/form-data">
+<form action="/group/categorys/" method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <input type="text" name="title" class="form-control" id="title" /></div>
     <div class="form-group">
@@ -48,7 +48,7 @@
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#title").val();
-            jajax('category/update', 'POST', { 'id': id, 'data': { title: value } })
+            jajax('group/categorys/' + id, 'PUT', { 'id': id, 'data': { title: value } })
         })
 
     });

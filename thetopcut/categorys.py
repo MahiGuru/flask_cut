@@ -5,10 +5,22 @@ from thetopcut.db import db
 from bson.objectid import ObjectId
 from flask import current_app as app
 import json
+from .method_views.category import CategoryAPI
 
-from .utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
 
 categorys = Blueprint('categorys', __name__, url_prefix='/category')
+
+def register_api(view, endpoint, url, pk='id', pk_type='int'):
+    view_func = view.as_view(endpoint)
+    categorys.add_url_rule(url, defaults={pk: None},
+                     view_func=view_func, methods=['GET',])
+    categorys.add_url_rule(url, view_func=view_func, methods=['POST',])
+    categorys.add_url_rule('%s<%s:%s>' % (url, pk_type, pk), view_func=view_func,
+                     methods=['GET', 'PUT', 'DELETE'])
+
+register_api(CategoryAPI, 'category_api', '/category/', pk='category_id')
+
+
 
 @categorys.route('/index', methods=["GET", "POST", "DELETE"])
 def index():
