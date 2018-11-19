@@ -29,14 +29,15 @@ class FrontViewTypeAPI(MethodView):
         fileNamesArr = upload_file(request.files.getlist("images"), frontViewType_folder, 'fvt')
         checkExists = alreadyExists(db.frontViewType, request.form['title'])
         if checkExists:
-            print("Ooops you entered with same name")
+            print("Ooops title already taken")
         else:
-            category = {
-                'title': request.form['title'],
-                'desc': request.form['desc'],
-                'img': fileNamesArr
-            }
-            insertedId = db.frontViewType.insert_one(category).inserted_id
+            record = request.get_json()
+            # category = {
+            #     'title': request.form['title'],
+            #     'desc': request.form['desc'],
+            #     'img': fileNamesArr
+            # }
+            insertedId = db.frontViewType.insert_one(record).inserted_id
             moved_file(fileNamesArr, frontViewType_folder, str(insertedId))
         return jsonify(str(insertedId))
 

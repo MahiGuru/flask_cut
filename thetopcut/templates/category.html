@@ -14,18 +14,24 @@
     <input type="submit" class="btn btn-primary" />
 </form>
 <div class="category">
-    {% for category in categorys %}
-    <h1> {{ category.name }} {{ category.title }} </h1>
-    <p> {{ category.description }} {{ category.desc }} </p>
+    <div class="row">
+        {% for category in categorys %}
+        <div class="col-lg-3">
+            <h1> {{ category.name }} {{ category.title }} </h1>
+            <p> {{ category.description }} {{ category.desc }} </p>
+            <p>
+                <button class="btn btn-danger delete_btn" data-id="{{category._id}}">DELETE</button>
+                <button class="btn btn-primary update_btn" data-id="{{category._id}}">Update</button>
+            </p>
+            {% for img in category.img %}
+            <img src="/category/{{category._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %}
+        </div>{% endfor %}
+    </div>
 
-    <a class="btn btn-danger btn-link delete_btn" data-id="{{category._id}}" href="#">DELETE</a>
-    <a class="btn btn-primary btn-link update_btn" data-id="{{category._id}}" href="#">Update</a>
-    {% for img in category.img %}
-    <img src="/category/{{category._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %} {% endfor %}
 </div>
 <script>
     function jajax(url, type, data) {
-        $.ajax({
+        return $.ajax({
             url: 'http://localhost:5000/' + url,
             contentType: "application/json; charset=utf-8",
             method: type,
@@ -43,12 +49,14 @@
     $(document).ready(function () {
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
-            jajax('category/index', 'DELETE', { 'id': id })
+            jajax('api/categorys/' + id, 'DELETE', { 'id': id }).then(function () {
+                window.location.href = "/category";
+            });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#title").val();
-            jajax('group/categorys/' + id, 'PUT', { 'id': id, 'data': { title: value } })
+            jajax('api/categorys/' + id, 'PUT', { 'id': id, 'data': { title: value } })
         })
 
     });

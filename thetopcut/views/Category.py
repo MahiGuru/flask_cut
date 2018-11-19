@@ -7,15 +7,22 @@ from flask import current_app as app
 from bson.objectid import ObjectId
 from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
 
+class CategoryView(MethodView):
+    def __init__(self):
+        print("in init")
 
-class CategoryAPI(MethodView):
-
-    def get(self, category_id):
+    def get(self, category_id=None):
         myArr = []
         print(category_id)
-        for record in db.categorys.find():
-            record['_id'] = str(record['_id'])
-            myArr.append(record)
+        if category_id is None:
+            for record in db.categorys.find():
+                record['_id'] = str(record['_id'])
+                myArr.append(record)
+        else:
+            for record in db.categorys.find({"_id": ObjectId(category_id)}):
+                record['_id'] = str(record['_id'])
+                myArr.append(record)
+
         pprint.pprint(myArr)
         return jsonify(myArr)
     def post(self):
@@ -32,6 +39,8 @@ class CategoryAPI(MethodView):
         if checkExists:
             print("Ooops you entered with same name")
         else:
+            # record = request.get_data()
+            # print(record)
             category = {
                 'title': request.form['title'],
                 'desc': request.form['desc'],
@@ -41,13 +50,18 @@ class CategoryAPI(MethodView):
             moved_file(fileNamesArr, category_folder, str(insertedId))
         return jsonify(str(insertedId))
 
-    def delete(self, category_id):
-        deleteId = db.categorys.remove({'_id': ObjectId(category_id)})
+    def delete(self, category_id=None):
+        print(category_id)
+        if category_id is not None:
+            deleteId = db.categorys.remove({'_id': ObjectId(category_id)})
+        print(deleteId)
         return jsonify(deleteId)
 
-    def put(self, category_id):
-        record = request.get_json()
-        print(record)
-        print(category_id)
-        result = db.categorys.update({'_id': ObjectId(category_id)}, {'$set': record['data']})
+    def put(self, category_id=None):
+        if category_id is None:
+            record = request.get_json()
+            result = db.categorys.update({'_id': record['id']}, {'$set': record['data']})
+        else:
+            result = db.categorys.update({'_id': ObjectId(category_id)}, {'$set': record['data']})
+        
         return jsonify(result)
