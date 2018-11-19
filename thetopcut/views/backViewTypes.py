@@ -7,13 +7,12 @@ from flask import current_app as app
 from bson.objectid import ObjectId
 from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
 
+class BackViewTypeAPI(MethodView):
 
-class CategoryAPI(MethodView):
-
-    def get(self, category_id):
+    def get(self, backview_id):
         myArr = []
-        print(category_id)
-        for record in db.categorys.find():
+        print(backview_id)
+        for record in db.backViewTypes.find():
             record['_id'] = str(record['_id'])
             myArr.append(record)
         pprint.pprint(myArr)
@@ -24,30 +23,28 @@ class CategoryAPI(MethodView):
         #if request.method == "POST":
         if 'images' not in request.files:
             return ''
-        category_folder = os.path.join(upload_folder, 'category')
-        '' if os.path.exists(category_folder) else os.makedirs(category_folder)
+        backViewType_folder = os.path.join(upload_folder, 'backViewTypes')
+        '' if os.path.exists(backViewType_folder) else os.makedirs(backViewType_folder)
 
-        fileNamesArr = upload_file(request.files.getlist("images"), category_folder, 'cat')
-        checkExists = alreadyExists(db.categorys, request.form['title'])
+        fileNamesArr = upload_file(request.files.getlist("images"), backViewType_folder, 'fvt')
+        checkExists = alreadyExists(db.backViewTypes, request.form['title'])
         if checkExists:
             print("Ooops you entered with same name")
         else:
-            category = {
+            backviewType = {
                 'title': request.form['title'],
                 'desc': request.form['desc'],
                 'img': fileNamesArr
             }
-            insertedId = db.categorys.insert_one(category).inserted_id
-            moved_file(fileNamesArr, category_folder, str(insertedId))
+            insertedId = db.backViewTypes.insert_one(backviewType).inserted_id
+            moved_file(fileNamesArr, backViewType_folder, str(insertedId))
         return jsonify(str(insertedId))
 
-    def delete(self, category_id):
-        deleteId = db.categorys.remove({'_id': ObjectId(category_id)})
+    def delete(self, backview_id):
+        deleteId = db.backViewTypes.remove({'_id': ObjectId(backview_id)})
         return jsonify(deleteId)
 
-    def put(self, category_id):
+    def put(self, backview_id):
         record = request.get_json()
-        print(record)
-        print(category_id)
-        result = db.categorys.update({'_id': ObjectId(category_id)}, {'$set': record['data']})
+        result = db.backViewTypes.update({'_id': ObjectId(backview_id)}, {'$set': record['data']})
         return jsonify(result)

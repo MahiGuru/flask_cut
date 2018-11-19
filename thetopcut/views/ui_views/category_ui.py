@@ -10,15 +10,18 @@ from thetopcut.views.categorys import CategoryAPI
 category_ui = Blueprint('category_ui', __name__, url_prefix='/category')
 
 @category_ui.route('/get', methods=["GET", "POST"])
-def categorys():
+def index():
     if request.method == "GET":
         resp = CategoryAPI.get('', '')
         result =  resp.get_json()
         return render_template('category.html', categorys=result)
-    elif request.method == "POST":
-        resp = CategoryAPI.post('', '')
-        if result:
-            return redirect(url_for('views.categorys'))
+
+@category_ui.route('/post', methods=["POST"])
+def post():
+    resp = CategoryAPI.post('')
+    print('\n\n\n\n')
+    if bool(resp):
+        return redirect(url_for('category_ui.index'))
         
 
 
