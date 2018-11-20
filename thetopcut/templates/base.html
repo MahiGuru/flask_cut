@@ -9,23 +9,92 @@
     {% else %}
     <title>Welcome to flaskCut</title>
     {% endif %}
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
 
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
-        crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='styles/styles.css')}}" />
+
     <script src="{{url_for('static', filename='scripts/jquery-3.3.1.js')}}"></script>
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
         crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+
+
 </head>
 
 <body>
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <a class="navbar-brand" href="#">Navbar</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+            aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item {% if request.path == '/products/' %}active{% endif %}">
+
+                    <a class="nav-link" href="/products">Products</a>
+                </li>
+                <li class="nav-item {% if request.path == '/category/' %}active{% endif %}">
+                    <a class="nav-link" href="/category">Categorys</a>
+                </li>
+                <li class="nav-item {% if request.path == '/frontview/' %}active{% endif %}">
+                    <a class="nav-link" href="/frontview">Front View Types</a>
+                </li>
+                <li class="nav-item {% if request.path == '/backviews/' %}active{% endif %}">
+                    <a class="nav-link" href="/backviews">Back View Types</a>
+                </li>
+                <li class="nav-item {% if request.path == '/bodytypes/' %}active{% endif %}">
+                    <a class="nav-link" href="/bodytypes">Body Types</a>
+                </li>
+                <li class="nav-item {% if request.path == '/occassiontypes/' %}active{% endif %}">
+                    <a class="nav-link" href="/occassiontypes">Occassion Types</a>
+                </li>
+                <li class="nav-item {% if request.path == '/clothTypes/' %}active{% endif %}">
+                    <a class="nav-link" href="/clothTypes">Cloth Types</a>
+                </li>
+                <li class="nav-item {% if request.path == '/users/' %}active{% endif %}">
+                    <a class="nav-link" href="/users">Create Users</a>
+                </li>
+            </ul>
+
+        </div>
+    </nav>
+
+    <main role="main">
+        <!-- Main jumbotron for a primary marketing message or call to action -->
+        <div class="jumbotron">
+            <div class="container">
+
+                END POINT : {{request.path}}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+
+    </main>
+    <script>
+        function jajax(url, type, data) {
+            return $.ajax({
+                url: 'http://localhost:5000/' + url,
+                contentType: "application/json; charset=utf-8",
+                method: type,
+                data: JSON.stringify(data)
+            }).done(function (data) {
+                console.log('SUCCEEEEEEED', data);
+            }).fail(function (jqXHR, textStatus, err) {
+                console.log('Error: ' + err);
+            }).always(function () {
+                console.log('ALWAYS ');
+            });
+        }
+    </script>
 </body>
 
 </html>

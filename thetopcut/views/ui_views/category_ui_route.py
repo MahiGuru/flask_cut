@@ -4,10 +4,10 @@ import pprint
 from bson.objectid import ObjectId
 from flask import current_app as app
 import json
-from thetopcut.views.Category import CategoryView
+from thetopcut.views.CategoryAPI import CategoryAPI
 
 category_ui = Blueprint('category_ui', __name__, url_prefix='/category')
-categorys = CategoryView()
+categorys = CategoryAPI()
 @category_ui.route('/', methods=["GET"])
 def index():
     if request.method == "GET":

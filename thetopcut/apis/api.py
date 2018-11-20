@@ -5,9 +5,9 @@ from thetopcut.database.db import db
 from bson.objectid import ObjectId
 from flask import current_app as app
 import json
-from thetopcut.views.Category import CategoryView
-from thetopcut.views.FrontViewTypes import FrontViewTypeAPI
-from thetopcut.views.BackViewTypes import BackViewTypeAPI
+from thetopcut.views.CategoryAPI import CategoryAPI
+from thetopcut.views.FrontViewTypeAPI import FrontViewTypeAPI
+from thetopcut.views.BackViewTypeAPI import BackViewTypeAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -17,6 +17,6 @@ def register_api(view, endpoint, url, pk='id', pk_type='string'):
     api.add_url_rule(url, view_func=view_func, methods=['POST',])
     api.add_url_rule('%s<%s:%s>' % (url, pk_type, pk), view_func=view_func, methods=['GET', 'PUT', 'DELETE'])
 
-register_api(CategoryView, 'category_api', '/categorys/', pk='category_id')
+register_api(CategoryAPI, 'category_api', '/categorys/', pk='category_id')
 register_api(FrontViewTypeAPI, 'frontviewtype_api', '/frontview/', pk='frontview_id')
 register_api(BackViewTypeAPI, 'backviewtype_api', '/backview/', pk='frontview_id')

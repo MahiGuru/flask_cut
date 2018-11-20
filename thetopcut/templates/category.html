@@ -3,48 +3,76 @@
 <p>
     <a href="/">Back to Home</a>
 </p>
-<h4>Test</h4>
+<h4>Category</h4>
 <form action="/category/post" method="POST" enctype="multipart/form-data">
+
+    <div class="row">
+        <div class="col-md-6 order-md-1">
+            <div class="mb-3">
+                <label for="username">Type</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">@</span>
+                    </div>
+                    <input type="text" class="form-control" id="type" name="type" placeholder="Category Type">
+
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description">Description <span class="text-muted">(Optional)</span></label>
+                <textarea col="3" rows="3" class="form-control" id="description" name="desc" placeholder="Description"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="description">Upload Pictures<span class="text-muted">(Optional)</span></label>
+                <input type="file" id="images" name="images" class="form-control">
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary" type="submit">Submit</button></div>
+
+            </div>
+        </div>
+
+        <div class="col-md-6 order-md-1">
+            <div class="category row">
+                {% for category in categorys %}
+                <div class="col-lg-6 mb-3">
+                    <h1> {{ category.name }} {{ category.title }} </h1>
+                    <p> {{ category.description }} {{ category.desc }} </p>
+                    <p>
+                        <button class="btn btn-danger delete_btn" data-id="{{category._id}}">DELETE</button>
+                        <button class="btn btn-primary update_btn" data-id="{{category._id}}">Update</button>
+                    </p>
+                    {% for img in category.img %}
+                    <img src="/category/{{category._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %}
+                </div>{% endfor %}
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <!-- 
     <div class="form-group">
         <input type="text" name="title" class="form-control" id="title" /></div>
     <div class="form-group">
         <input type="text" name="desc" class="form-control" /></div>
     <div class="form-group">
         <input type="file" name="images" class="form-control" multiple="" /></div>
-    <input type="submit" class="btn btn-primary" />
+    <input type="submit" class="btn btn-primary" /> -->
 </form>
-<div class="category">
-    <div class="row">
-        {% for category in categorys %}
-        <div class="col-lg-3">
-            <h1> {{ category.name }} {{ category.title }} </h1>
-            <p> {{ category.description }} {{ category.desc }} </p>
-            <p>
-                <button class="btn btn-danger delete_btn" data-id="{{category._id}}">DELETE</button>
-                <button class="btn btn-primary update_btn" data-id="{{category._id}}">Update</button>
-            </p>
-            {% for img in category.img %}
-            <img src="/category/{{category._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %}
-        </div>{% endfor %}
-    </div>
 
-</div>
 <script>
-    function jajax(url, type, data) {
-        return $.ajax({
-            url: 'http://localhost:5000/' + url,
-            contentType: "application/json; charset=utf-8",
-            method: type,
-            data: JSON.stringify(data)
-        }).done(function (data) {
-            console.log('SUCCEEEEEEED', data);
-        }).fail(function (jqXHR, textStatus, err) {
-            console.log('Error: ' + err);
-        }).always(function () {
-            console.log('ALWAYS ');
-        });
-    }
-
 
     $(document).ready(function () {
         $(".delete_btn").on("click", function () {
@@ -55,8 +83,8 @@
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
-            value = $("#title").val();
-            jajax('api/categorys/' + id, 'PUT', { 'id': id, 'data': { title: value } })
+            value = $("#type").val();
+            jajax('api/categorys/' + id, 'PUT', { 'id': id, 'data': { type: value } })
         })
 
     });

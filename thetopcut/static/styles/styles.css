@@ -1,0 +1,9 @@
+.bg-dark{
+   background-color: rgb(48, 48, 48);
+}
+.bg-dark ul li a{
+    color:white;
+ }
+ .bg-dark .nav>li>a:focus, .bg-dark .nav>li>a:hover{
+    background-color: black;
+ }

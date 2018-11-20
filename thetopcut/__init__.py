@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, redirect, url_for
 import pprint
 
 def create_app(test_config=None):
@@ -22,12 +22,18 @@ def create_app(test_config=None):
     # print('\n\n\n\n')
     # print(db.category.find())
     from thetopcut.apis.api import api
-    from thetopcut.views.ui_views.category_ui import category_ui
+    from thetopcut.views.ui_views.category_ui_route import category_ui
+    from thetopcut.views.ui_views.frontview_ui_route import frontview_ui
     # from thetopcut.groups_api import groups
     app.register_blueprint(api)
     app.register_blueprint(category_ui)
+    app.register_blueprint(frontview_ui)
     
     # IMAGE Display Route @ UI
+    @app.route('/')  
+    def reroute():
+        return redirect(url_for('category_ui.index'))
+     # IMAGE Display Route @ UI
     @app.route('/<path:filename>')  
     def send_file(filename):
         return send_from_directory(app.config['UPLOAD_FOLDER']+'/', filename)

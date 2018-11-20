@@ -1,0 +1,81 @@
+{% extends "base.html" %} {% block content %}
+
+<p>
+    <a href="/">Back to Home</a>
+</p>
+<h4>FRONT VIEW TYPES</h4>
+<div class="row">
+    <div class="col-md-6 order-md-1">
+        <form action="/frontview/post" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="username">Type</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">@</span>
+                    </div>
+                    <input type="text" class="form-control" id="type" name="type" placeholder="Front View Type">
+
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="description">Description <span class="text-muted">(Optional)</span></label>
+                <textarea col="3" rows="3" class="form-control" id="description" name="desc" placeholder="Description"></textarea>
+            </div>
+            <div class=" mb-3">
+                <label for="country">Category</label>
+                <select class="custom-select d-block w-100" id="category" name="category">
+                    {% for c in categorys %}
+                    <option value="{{ c._id }}">{{ c.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="description">Upload Pictures<span class="text-muted">(Optional)</span></label>
+                <input type="file" id="images" name="images" class="form-control">
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary" type="submit">Submit</button></div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6 order-md-1">
+        <div class="frontTypes">
+            {% for frontType in frontViews %}
+            <div class="col-lg-6 mb-3">
+                <h1> {{ frontType.type }}</h1>
+                <p> {{ frontType.desc }} </p>
+                <p>
+                    <button class="btn btn-danger delete_btn" data-id="{{frontType._id}}">DELETE</button>
+                    <button class="btn btn-primary update_btn" data-id="{{frontType._id}}">Update</button>
+                </p>
+                {% for img in frontType.img %}
+                <img src="/frontViewTypes/{{frontType._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %}
+            </div>{% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".delete_btn").on("click", function () {
+            id = $(this).attr('data-id');
+            alert(id)
+            jajax('api/frontview/' + id, 'DELETE', { 'id': id }).then(function () {
+                window.location.href = "/frontview/";
+            });
+        })
+        $(".update_btn").on("click", function () {
+            id = $(this).attr('data-id');
+            value = $("#type").val();
+            jajax('api/frontview/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+        })
+
+    });
+
+</script>
+
+
+{% endblock %}

@@ -13,6 +13,7 @@ class FrontViewModel(object):
         """Return a new Car object."""
         self.type = name
         self.desc = desc
+        self.categoryId = categoryId
         self.img = img
         self.created_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')
     
