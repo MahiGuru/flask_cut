@@ -1,7 +1,6 @@
 from flask import current_app, Blueprint, render_template, redirect, request, url_for, jsonify
 import os
 import pprint
-from thetopcut.db import db
 from bson.objectid import ObjectId
 from flask import current_app as app
 import json

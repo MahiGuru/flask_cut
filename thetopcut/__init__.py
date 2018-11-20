@@ -18,7 +18,7 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass 
-    # from thetopcut.db import db
+    # from thetopcut.database.db import db
     # print('\n\n\n\n')
     # print(db.category.find())
     from thetopcut.apis.api import api

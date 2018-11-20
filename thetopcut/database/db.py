@@ -7,6 +7,7 @@ db = client.flaskCut
 # listout all collections
 # pprint.pprint(db.collection_names(include_system_collections=False))
 
-# categorys = db.category
-# frontViewTypes = db.frontViewType
-# backViewTypes = db.backViewType
+# Collection referencess
+col_category = db.category
+col_frontViewType = db.frontViewType
+col_backViewType = db.backViewType

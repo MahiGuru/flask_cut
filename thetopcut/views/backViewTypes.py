@@ -1,7 +1,7 @@
 from flask import jsonify, request
 from flask.views import View, MethodView
 import pprint
-from thetopcut.db import db
+from thetopcut.database.db import db
 import os
 from flask import current_app as app
 from bson.objectid import ObjectId
