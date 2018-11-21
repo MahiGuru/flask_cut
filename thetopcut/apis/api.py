@@ -8,6 +8,10 @@ import json
 from thetopcut.views.CategoryAPI import CategoryAPI
 from thetopcut.views.FrontViewTypeAPI import FrontViewTypeAPI
 from thetopcut.views.BackViewTypeAPI import BackViewTypeAPI
+from thetopcut.views.BodyTypeAPI import BodyTypeAPI
+from thetopcut.views.ClothTypeAPI import ClothTypeAPI
+from thetopcut.views.OccassionTypeAPI import OccassionTypeAPI
+from thetopcut.views.ProductAPI import ProductAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -19,4 +23,8 @@ def register_api(view, endpoint, url, pk='id', pk_type='string'):
 
 register_api(CategoryAPI, 'category_api', '/categorys/', pk='category_id')
 register_api(FrontViewTypeAPI, 'frontviewtype_api', '/frontview/', pk='frontview_id')
-register_api(BackViewTypeAPI, 'backviewtype_api', '/backview/', pk='frontview_id')
+register_api(BackViewTypeAPI, 'backviewtype_api', '/backview/', pk='backview_id')
+register_api(BodyTypeAPI, 'bodytype_api', '/bodytype/', pk='bodytype_id')
+register_api(ClothTypeAPI, 'clothtype_api', '/clothtype/', pk='clothType_id')
+register_api(OccassionTypeAPI, 'occassiontype_api', '/occassiontype/', pk='occassion_id')
+register_api(ProductAPI, 'products_api', '/products/', pk='product_id')

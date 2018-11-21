@@ -8,6 +8,15 @@ db = client.flaskCut
 # pprint.pprint(db.collection_names(include_system_collections=False))
 
 # Collection referencess
-col_category = db.category
-col_frontViewType = db.frontViewType
-col_backViewType = db.backViewType
+col_category = db.categorys
+col_frontViewType = db.frontViewTypes
+col_backViewType = db.backViewTypes
+col_clothType = db.clothTypes
+col_occassionType = db.occassionTypes
+col_bodyType = db.bodyTypes
+col_products = db.products
+col_users = db.users
+col_tailors = db.tailors
+col_designers = db.tailors
+col_rating = db.ratings
+col_likes = db.likes

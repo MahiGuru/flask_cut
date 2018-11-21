@@ -9,10 +9,11 @@ class ClothTypeModel(object):
         created_date: current system date.
     """
 
-    def __init__(self, name, desc, categoryId, img):
+    def __init__(self, name, desc, categoryId=None, img=[]):
         """Return a new Car object."""
         self.type = name
         self.desc = desc
+        self.categoryId = categoryId
         self.img = img
         self.created_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')
     

@@ -24,10 +24,20 @@ def create_app(test_config=None):
     from thetopcut.apis.api import api
     from thetopcut.views.ui_views.category_ui_route import category_ui
     from thetopcut.views.ui_views.frontview_ui_route import frontview_ui
+    from thetopcut.views.ui_views.backview_ui_route import backview_ui
+    from thetopcut.views.ui_views.bodytype_ui_route import bodytype_ui
+    from thetopcut.views.ui_views.clothtype_ui_route import clothtype_ui
+    from thetopcut.views.ui_views.occassiontype_ui_route import occassiontype_ui
+    from thetopcut.views.ui_views.product_ui_route import product_ui
     # from thetopcut.groups_api import groups
     app.register_blueprint(api)
     app.register_blueprint(category_ui)
     app.register_blueprint(frontview_ui)
+    app.register_blueprint(backview_ui)
+    app.register_blueprint(bodytype_ui)
+    app.register_blueprint(clothtype_ui)
+    app.register_blueprint(occassiontype_ui)
+    app.register_blueprint(product_ui)
     
     # IMAGE Display Route @ UI
     @app.route('/')  

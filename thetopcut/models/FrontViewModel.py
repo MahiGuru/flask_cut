@@ -8,8 +8,8 @@ class FrontViewModel(object):
         img: copied image names from upload folder 
         created_date: current system date.
     """
-
-    def __init__(self, name, desc, categoryId, img):
+  
+    def __init__(self, name, desc, categoryId=None, img=[]):
         """Return a new Car object."""
         self.type = name
         self.desc = desc

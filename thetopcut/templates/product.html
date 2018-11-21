@@ -1,0 +1,129 @@
+{% extends "base.html" %} {% block content %}
+
+<h4>Create Product</h4>
+<div class="row">
+    <div class="col-md-12 order-md-1">
+        <form action="/product/post" method="POST" enctype="multipart/form-data">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <label for="username">Product Name: </label>
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="type" name="name" placeholder="Product Name">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description">Description <span class="text-muted">(Optional)</span></label>
+                        <textarea col="3" rows="3" class="form-control" id="description" name="desc" placeholder="Description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="designer">Designers </label>
+                        <input type="text" class="form-control" id="designer" name="designer" placeholder="Description"
+                            value="Mahipal" />
+                    </div>
+                    <div class=" mb-3">
+                        <label for="frontType">Front View Types</label>
+                        <select class="custom-select d-block w-100" id="frontType" name="frontType">
+                            {% for c in frontTypes %}
+                            <option value="{{ c._id }}">{{ c.type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class=" mb-3">
+                        <label for="backType">Back View Types</label>
+                        <select class="custom-select d-block w-100" id="backType" name="backType">
+                            {% for c in backTypes %}
+                            <option value="{{ c._id }}">{{ c.type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class=" mb-3">
+                        <label for="bodyType">Body Types</label>
+                        <select class="custom-select d-block w-100" id="bodyType" name="bodyType">
+                            {% for c in bodyTypes %}
+                            <option value="{{ c._id }}">{{ c.type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class=" mb-3">
+                        <label for="clothType">Cloth Types</label>
+                        <select class="custom-select d-block w-100" id="clothType" name="clothType">
+                            {% for c in clothTypes %}
+                            <option value="{{ c._id }}">{{ c.type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class=" mb-3">
+                        <label for="occassionType">Occassion Types</label>
+                        <select class="custom-select d-block w-100" id="occassionType" name="occassionType">
+                            {% for c in occassionTypes %}
+                            <option value="{{ c._id }}">{{ c.type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="mb-3">
+                <label for="description">Upload Pictures<span class="text-muted">(Optional)</span></label>
+                <input type="file" id="images" name="images" class="form-control" multiple>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary" type="submit">Submit</button></div>
+            </div>
+            <br />
+            <br />
+            <br />
+        </form>
+    </div>
+
+    <div class="col-md-12 order-md-1">
+        <div class="backTypes row">
+            {% for product in products[::-1] %}
+            <div class="col-lg-6 mb-3">
+                <h1> {{ product.name }}</h1>
+                <p> {{ product.desc }} </p>
+                <p>
+                    <button class="btn btn-danger delete_btn" data-id="{{product._id}}">DELETE</button>
+                    <button class="btn btn-primary update_btn" data-id="{{product._id}}">Update</button>
+                </p>
+                {% for img in product.img %}
+                <img src="/products/{{product._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %}
+            </div>{% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".create_btn").on("click", function () {
+            alert(id)
+            jajax('api/backview/' + id, 'DELETE', { 'id': id }).then(function () {
+                window.location.href = "/backview/";
+            });
+        })
+        $(".delete_btn").on("click", function () {
+            id = $(this).attr('data-id');
+            alert(id)
+            jajax('api/backview/' + id, 'DELETE', { 'id': id }).then(function () {
+                window.location.href = "/backview/";
+            });
+        })
+        $(".update_btn").on("click", function () {
+            id = $(this).attr('data-id');
+            value = $("#type").val();
+            jajax('api/backview/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+        })
+
+    });
+
+</script>
+
+
+{% endblock %}
