@@ -83,9 +83,10 @@
         function jajax(url, type, data) {
             return $.ajax({
                 url: 'http://localhost:5000/' + url,
-                contentType: "application/json; charset=utf-8",
+                contentType: false,
+                processData: false,
                 method: type,
-                data: JSON.stringify(data)
+                data: data
             }).done(function (data) {
                 console.log('SUCCEEEEEEED', data);
             }).fail(function (jqXHR, textStatus, err) {

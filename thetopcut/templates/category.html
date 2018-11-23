@@ -4,7 +4,7 @@
     <a href="/">Back to Home</a>
 </p>
 <h4>Category</h4>
-<form action="/category/post" method="POST" enctype="multipart/form-data">
+<form class="form">
 
     <div class="row">
         <div class="col-md-6 order-md-1">
@@ -29,7 +29,7 @@
                 <input type="file" id="images" name="images" class="form-control" multiple>
             </div>
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary" type="submit">Submit</button></div>
+                <div class="col-lg-6 col-md-6 col-sm-6 "><button class="btn btn-primary create_btn" type="button">Submit</button></div>
 
             </div>
         </div>
@@ -51,30 +51,33 @@
         </div>
 
     </div>
-
-
-
-
-
-
-
-
-
-
-
-    <!-- 
-    <div class="form-group">
-        <input type="text" name="title" class="form-control" id="title" /></div>
-    <div class="form-group">
-        <input type="text" name="desc" class="form-control" /></div>
-    <div class="form-group">
-        <input type="file" name="images" class="form-control" multiple="" /></div>
-    <input type="submit" class="btn btn-primary" /> -->
+ 
 </form>
 
 <script>
 
     $(document).ready(function () {
+        $(".create_btn").on("click", function () {
+            var data = new FormData();
+
+            //Form data
+            var form_data = $('.form').serializeArray();
+            $.each(form_data, function (key, input) {
+                data.append(input.name, input.value);
+                console.log(data, input.name, input.value);
+            });
+
+            //File data
+            var file_data = $('input[name="images"]')[0].files;
+            for (var i = 0; i < file_data.length; i++) {
+                data.append("images", file_data[i]);
+            }
+            console.log(data);
+            jajax('api/categorys/', 'POST', data).then(function () {
+                // window.location.href = "/category";
+            });
+        })
+        
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             jajax('api/categorys/' + id, 'DELETE', { 'id': id }).then(function () {

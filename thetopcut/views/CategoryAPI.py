@@ -9,9 +9,6 @@ from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file,
 from thetopcut.models.CategoryModel import CategoryModel
 
 class CategoryAPI(MethodView):
-    def __init__(self):
-        print(CategoryModel)
-        print("in init")
 
     def get(self, category_id=None):
 
@@ -31,29 +28,23 @@ class CategoryAPI(MethodView):
     def post(self):
         print(os.getcwd())
         upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
-        #if request.method == "POST":
+        
         if 'images' not in request.files:
             return ''
         category_folder = os.path.join(upload_folder, 'category')
         '' if os.path.exists(category_folder) else os.makedirs(category_folder)
 
         fileNamesArr = upload_file(request.files.getlist("images"), category_folder, 'cat')
-        checkExists = alreadyExists(col_category, request.form['type'])
+        checkExists = alreadyExists(col_category, request.form['type'])        
         if checkExists:
             print("Ooops you entered with same name")
         else:
-            # record = request.get_data()
-            # print(record)
-            category_arr = CategoryModel(request.form['type'], request.form['desc'], fileNamesArr)
+            record = request.form
+            print(record)
+            category_arr = CategoryModel(record['type'], record['desc'], fileNamesArr)
             category = category_arr.to_document()
-            pprint.pprint(category_arr.to_document())
-            # category = {
-            #     'title': request.form['title'],
-            #     'desc': request.form['desc'],
-            #     'img': fileNamesArr
-            # }
             insertedId = col_category.insert_one(category).inserted_id
-            moved_file(fileNamesArr, category_folder, str(insertedId))
+            moved_file(fileNamesArr, category_folder, str(insertedId)) 
         return jsonify(str(insertedId))
 
     def delete(self, category_id=None):
