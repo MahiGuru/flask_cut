@@ -5,67 +5,42 @@ from thetopcut.database.db import col_backViewType
 import os
 from flask import current_app as app
 from bson.objectid import ObjectId
-from thetopcut.utils.common_def import alreadyExists, upload_file, moved_file
+from thetopcut.utils.common_def import alreadyExists, moved_file, upload_images
 from thetopcut.models.BackViewModel import BackViewModel
 
+from thetopcut.database.get_events import get_records
+from thetopcut.database.delete_events import delete_record
+from thetopcut.database.update_events import modify_record
 
-class BackViewTypeAPI(MethodView):
+class BackViewTypeAPI(MethodView): 
 
-    def __init__(self):
-        print("in init")
+   
+    def get(self, _id=None):
+        return get_records(col_backViewType, _id)
 
-    def get(self, backview_id=None):
-        myArr = []
-        print(backview_id)
-        if backview_id is None:
-            for record in col_backViewType.find():
-                record['_id'] = str(record['_id'])
-                myArr.append(record)
-        else:
-            for record in col_backViewType.find({"_id": ObjectId(backview_id)}):
-                record['_id'] = str(record['_id'])
-                myArr.append(record)
+    def post(self):        
+        """ below code will move all the images to uploads/category folder with 'fvt' prefix """
+        upload_files = upload_images(request.files, 'backViewTypes', 'bvt')
+        record = request.form
+        """ Values assign to Category Model """
+        pprint.pprint(record)
+        model_record = BackViewModel(record['type'], record['desc'], record['category'], upload_files['fileArr'])
+        """ Model converts to document like json object """
+        record_document = model_record.to_document()
+        """ Below line will insert record and get objectID """
+        insertedId = col_backViewType.insert_one(record_document).inserted_id
+        """ Below line does files move from one place to another """
+        moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
 
-        pprint.pprint(myArr)
-        return jsonify(myArr)
-    def post(self):
-        print(os.getcwd())
-        upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
-        #if request.method == "POST":
-        print('\n\n\n\n')
-        print(request.files)
-        if 'images' not in request.files:
-            return ''
-        backview_folder = os.path.join(upload_folder, 'backViewTypes')
-        '' if os.path.exists(backview_folder) else os.makedirs(backview_folder)
-
-        fileNamesArr = upload_file(request.files.getlist("images"), backview_folder, 'fvt')
-        checkExists = alreadyExists(col_backViewType, request.form['type'])
-        if checkExists:
-            print("Ooops you entered with same name")
-        else:
-            # record = request.get_data()
-            # print(record)
-            categoryIds = []
-            categoryIds.append(request.form['category'])
-            backviews = BackViewModel(request.form['type'], request.form['desc'], categoryIds, fileNamesArr)
-            backviews_document = backviews.to_document()
-            pprint.pprint(backviews.to_document())
-             
-            insertedId = col_backViewType.insert_one(backviews_document).inserted_id
-            moved_file(fileNamesArr, backview_folder, str(insertedId))
         return jsonify(str(insertedId))
 
-    def delete(self, backview_id=None):
-        if backview_id is not None:
-            deleteId = col_backViewType.remove({'_id': ObjectId(backview_id)})
-        return jsonify(deleteId)
+    def delete(self, _id=None):
+        if _id is None:
+            return "Please provide valid id"
+        return delete_record(col_backViewType, _id)
 
-    def put(self, backview_id=None):
-        if backview_id is None:
-            record = request.get_json()
-            result = col_backViewType.update({'_id': record['id']}, {'$set': record['data']})
-        else:
-            result = col_backViewType.update({'_id': ObjectId(backview_id)}, {'$set': record['data']})
-        
-        return jsonify(result)
+    def put(self, _id=None):
+        if _id is None:
+            return "Please provide valid id"
+        record = request.get_json()
+        return modify_record(col_backViewType, _id, record['data'])

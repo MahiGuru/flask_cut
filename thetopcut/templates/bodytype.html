@@ -6,7 +6,7 @@
 <h4>Body TYPE</h4>
 <div class="row">
     <div class="col-md-6 order-md-1">
-        <form action="/bodytype/post" method="POST" enctype="multipart/form-data">
+        <form class="form">
             <div class="mb-3">
                 <label for="username">Type</label>
                 <div class="input-group">
@@ -35,7 +35,7 @@
                 <input type="file" id="images" name="images" class="form-control" multiple>
             </div>
             <div class="row">
-                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary" type="submit">Submit</button></div>
+                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary create_btn" type="button">Submit</button></div>
             </div>
         </form>
     </div>
@@ -60,9 +60,13 @@
 
 <script>
     $(document).ready(function () {
+        $(".create_btn").on("click", function () {
+            jajax('api/bodytype/', 'POST', {}, '.form').then(function () {
+                window.location.href = "/bodytype";
+            });
+        })
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
-            alert(id)
             jajax('api/bodytype/' + id, 'DELETE', { 'id': id }).then(function () {
                 window.location.href = "/bodytype/";
             });

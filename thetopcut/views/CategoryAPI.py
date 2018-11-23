@@ -7,14 +7,14 @@ from flask import current_app as app
 from bson.objectid import ObjectId
 from thetopcut.utils.common_def import alreadyExists, moved_file, upload_images
 from thetopcut.models.CategoryModel import CategoryModel
-from thetopcut.utils.get_collection import get_records
-from thetopcut.utils.delete_collection import delete_record
-from thetopcut.utils.modify_collection import modify_record
+from thetopcut.database.get_events import get_records
+from thetopcut.database.delete_events import delete_record
+from thetopcut.database.update_events import modify_record
 
 class CategoryAPI(MethodView):
 
-    def get(self, category_id=None):
-        return get_records(col_category, category_id)
+    def get(self, _id=None):
+        return get_records(col_category, _id)
 
     def post(self):
         """ below code will move all the images to uploads/category folder with 'cat' prefix """
@@ -31,13 +31,13 @@ class CategoryAPI(MethodView):
 
         return jsonify(str(insertedId))
 
-    def delete(self, category_id=None):
-        if category_id is None:
+    def delete(self, _id=None):
+        if _id is None:
             return "Please provide valid id"
-        return delete_record(col_category, category_id)
+        return delete_record(col_category, _id)
 
-    def put(self, category_id=None):
-        if category_id is None:
+    def put(self, _id=None):
+        if _id is None:
             return "Please provide valid id"
         record = request.get_json()
-        return modify_record(col_category, category_id, record['data'])
+        return modify_record(col_category, _id, record['data'])

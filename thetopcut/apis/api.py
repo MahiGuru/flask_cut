@@ -15,16 +15,16 @@ from thetopcut.views.ProductAPI import ProductAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
-def register_api(view, endpoint, url, pk='id', pk_type='string'):
+def register_api(view, endpoint, url, pk='_id', pk_type='string'):
     view_func = view.as_view(endpoint)
     api.add_url_rule(url, defaults={pk: None}, view_func=view_func, methods=['GET'])
     api.add_url_rule(url, view_func=view_func, methods=['POST',])
     api.add_url_rule('%s<%s:%s>' % (url, pk_type, pk), view_func=view_func, methods=['GET', 'PUT', 'DELETE'])
 
-register_api(CategoryAPI, 'category_api', '/categorys/', pk='category_id')
-register_api(FrontViewTypeAPI, 'frontviewtype_api', '/frontview/', pk='frontview_id')
-register_api(BackViewTypeAPI, 'backviewtype_api', '/backview/', pk='backview_id')
-register_api(BodyTypeAPI, 'bodytype_api', '/bodytype/', pk='bodytype_id')
-register_api(ClothTypeAPI, 'clothtype_api', '/clothtype/', pk='clothType_id')
-register_api(OccassionTypeAPI, 'occassiontype_api', '/occassiontype/', pk='occassion_id')
-register_api(ProductAPI, 'products_api', '/products/', pk='product_id')
+register_api(CategoryAPI, 'category_api', '/categorys/')
+register_api(FrontViewTypeAPI, 'frontviewtype_api', '/frontview/')
+register_api(BackViewTypeAPI, 'backviewtype_api', '/backview/')
+register_api(BodyTypeAPI, 'bodytype_api', '/bodytype/')
+register_api(ClothTypeAPI, 'clothtype_api', '/clothtype/')
+register_api(OccassionTypeAPI, 'occassiontype_api', '/occassiontype/')
+register_api(ProductAPI, 'products_api', '/products/')

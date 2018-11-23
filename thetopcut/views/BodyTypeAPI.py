@@ -5,63 +5,41 @@ from thetopcut.database.db import col_bodyType
 import os
 from flask import current_app as app
 from bson.objectid import ObjectId
-from thetopcut.utils.common_def import alreadyExists, upload_file, moved_file
+from thetopcut.utils.common_def import alreadyExists, moved_file, upload_images
 from thetopcut.models.BodyTypeModel import BodyTypeModel
 
+from thetopcut.database.get_events import get_records
+from thetopcut.database.delete_events import delete_record
+from thetopcut.database.update_events import modify_record
 
 class BodyTypeAPI(MethodView):
+        
+    def get(self, _id=None):
+        return get_records(col_bodyType, _id)
 
-    def __init__(self):
-        print("in init")
-
-    def get(self, bodytype_id=None):
-        myArr = []
-        if bodytype_id is None:
-            for record in col_bodyType.find():
-                record['_id'] = str(record['_id'])
-                myArr.append(record)
-        else:
-            for record in col_bodyType.find({"_id": ObjectId(bodytype_id)}):
-                record['_id'] = str(record['_id'])
-                myArr.append(record)
-
-        return jsonify(myArr)
     def post(self):
-        print(os.getcwd())
-        upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
-        print('\n\n\n\n')
-        print(request.files)
-        if 'images' not in request.files:
-            return ''
-        bodytype_folder = os.path.join(upload_folder, 'bodyTypes')
-        '' if os.path.exists(bodytype_folder) else os.makedirs(bodytype_folder)
+        """ below code will move all the images to uploads/category folder with 'fvt' prefix """
+        upload_files = upload_images(request.files, 'bodyTypes', 'bt')
+        record = request.form
+        """ Values assign to Category Model """
+        pprint.pprint(record)
+        model_record = BodyTypeModel(record['type'], record['desc'], record['category'], upload_files['fileArr'])
+        """ Model converts to document like json object """
+        record_document = model_record.to_document()
+        """ Below line will insert record and get objectID """
+        insertedId = col_bodyType.insert_one(record_document).inserted_id
+        """ Below line does files move from one place to another """
+        moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
 
-        fileNamesArr = upload_file(request.files.getlist("images"), bodytype_folder, 'bt')
-        checkExists = alreadyExists(col_bodyType, request.form['type'])
-        if checkExists:
-            print("Ooops you entered with same name")
-        else:
-            # record = request.get_data()
-            # print(record)
-            categoryIds = []
-            categoryIds.append(request.form['category'])
-            bodytypes = BodyTypeModel(request.form['type'], request.form['desc'], categoryIds, fileNamesArr)
-            bodytypes_document = bodytypes.to_document()
-             
-            insertedId = col_bodyType.insert_one(bodytypes_document).inserted_id
-            moved_file(fileNamesArr, bodytype_folder, str(insertedId))
         return jsonify(str(insertedId))
 
-    def delete(self, bodytype_id=None):
-        if bodytype_id is not None:
-            deleteId = col_bodyType.remove({'_id': ObjectId(bodytype_id)})
-        return jsonify(deleteId)
+    def delete(self, _id=None):
+        if _id is None:
+            return "Please provide valid id"
+        return delete_record(col_bodyType, _id)
 
-    def put(self, bodytype_id=None):
-        if bodytype_id is None:
-            record = request.get_json()
-            result = col_bodyType.update({'_id': record['id']}, {'$set': record['data']})
-        else:
-            result = col_bodyType.update({'_id': ObjectId(bodytype_id)}, {'$set': record['data']})
-        
-        return jsonify(result)
+    def put(self, _id=None):
+        if _id is None:
+            return "Please provide valid id"
+        record = request.get_json()
+        return modify_record(col_bodyType, _id, record['data'])

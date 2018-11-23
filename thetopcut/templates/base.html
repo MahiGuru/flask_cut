@@ -84,7 +84,7 @@
             var data = data;
             var contentT = false
             var proccessData = false;
-            if(formSelector){
+            if (formSelector) {
                 data = new FormData();
 
                 //Form data
@@ -95,20 +95,20 @@
                 });
 
                 //File data
-                $(formSelector).find("input[type='file']").each(function(i, val){
+                $(formSelector).find("input[type='file']").each(function (i, val) {
                     var file_data = val.files;
                     console.log(file_data, val);
                     for (var i = 0; i < file_data.length; i++) {
                         console.log("inside FOR file data >>>> ", file_data)
-                        data.append("images"+i, file_data[i]);
+                        data.append("images" + i, file_data[i]);
                     }
-                    
-                
+
+
                 });
                 contentT = false;
                 processData = false;
-                
-            }else{
+
+            } else {
                 contentT = "application/json";
                 processData = true;
                 data = JSON.stringify(data);
