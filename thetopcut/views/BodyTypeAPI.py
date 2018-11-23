@@ -5,7 +5,7 @@ from thetopcut.database.db import col_bodyType
 import os
 from flask import current_app as app
 from bson.objectid import ObjectId
-from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
+from thetopcut.utils.common_def import alreadyExists, upload_file, moved_file
 from thetopcut.models.BodyTypeModel import BodyTypeModel
 
 

@@ -5,56 +5,32 @@ from thetopcut.database.db import col_frontViewType
 import os
 from flask import current_app as app
 from bson.objectid import ObjectId
-from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
+from thetopcut.utils.common_def import alreadyExists, moved_file, upload_images
 from thetopcut.models.FrontViewModel import FrontViewModel
 
+from thetopcut.utils.get_collection import get_records
+from thetopcut.utils.delete_collection import delete_record
+from thetopcut.utils.modify_collection import modify_record
 
 class FrontViewTypeAPI(MethodView):
 
-    def __init__(self):
-        print("in init")
-
     def get(self, frontview_id=None):
-        myArr = []
-        print(frontview_id)
-        if frontview_id is None:
-            for record in col_frontViewType.find():
-                record['_id'] = str(record['_id'])
-                myArr.append(record)
-        else:
-            for record in col_frontViewType.find({"_id": ObjectId(frontview_id)}):
-                record['_id'] = str(record['_id'])
-                myArr.append(record)
+        return get_records(col_frontViewType, frontview_id)
 
-        pprint.pprint(myArr)
-        return jsonify(myArr)
     def post(self):
-        print(os.getcwd())
-        upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
-        #if request.method == "POST":
-        print('\n\n\n\n')
-        print(request.files)
-        if 'images' not in request.files:
-            return ''
-        frontview_folder = os.path.join(upload_folder, 'frontViewTypes')
-        '' if os.path.exists(frontview_folder) else os.makedirs(frontview_folder)
+        """ below code will move all the images to uploads/category folder with 'cat' prefix """
+        upload_files = upload_images(request.files, 'category', 'fvt')
+        record = request.form
+        """ Values assign to Category Model """
+        model_record = FrontViewModel(record['type'], record['desc'], record['category'], upload_files['fileArr'])
+        """ Model converts to document like json object """
+        record_document = model_record.to_document()
+        """ Below line will insert record and get objectID """
+        insertedId = col_frontViewType.insert_one(record_document).inserted_id
+        """ Below line does files move from one place to another """
+        moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
 
-        fileNamesArr = upload_file(request.files.getlist("images"), frontview_folder, 'fvt')
-        checkExists = alreadyExists(col_frontViewType, request.form['type'])
-        if checkExists:
-            print("Ooops you entered with same name")
-        else:
-            # record = request.get_data()
-            # print(record)
-            categoryIds = []
-            categoryIds.append(request.form['category'])
-            frontviews = FrontViewModel(request.form['type'], request.form['desc'], categoryIds, fileNamesArr)
-            frontviews_document = frontviews.to_document()
-            pprint.pprint(frontviews.to_document())
-             
-            insertedId = col_frontViewType.insert_one(frontviews_document).inserted_id
-            moved_file(fileNamesArr, frontview_folder, str(insertedId))
-        return jsonify(str(insertedId))
+        return jsonify(str(insertedId)) 
 
     def delete(self, frontview_id=None):
         print(frontview_id)

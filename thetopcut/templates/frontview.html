@@ -6,7 +6,7 @@
 <h4>FRONT VIEW TYPES</h4>
 <div class="row">
     <div class="col-md-6 order-md-1">
-        <form action="/frontview/post" method="POST" enctype="multipart/form-data">
+        <form class="form" enctype="multipart/form-data">
             <div class="mb-3">
                 <label for="username">Type</label>
                 <div class="input-group">
@@ -60,6 +60,11 @@
 
 <script>
     $(document).ready(function () {
+        $(".create_btn").on("click", function () {
+            jajax('api/frontview/', 'POST', {}, '.form').then(function () {
+                window.location.href = "/frontview";
+            });
+        })
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             alert(id)

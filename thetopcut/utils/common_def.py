@@ -10,13 +10,17 @@ from flask import current_app as app
 def upload_images(files, folder, prefix):
         """    Below line will create uploads folder(e.g /categorys) """
         upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
+        
         """    Below line will create folder(e.g /categorys) """
         category_folder = os.path.join(upload_folder, folder)
+
+        """ Below line will check if folder("category") exists or not """
         '' if os.path.exists(category_folder) else os.makedirs(category_folder)
-        filesArr = []
+        
         """     request.files loop here
                 push every image object into filesArr
         """
+        filesArr = []
         for img in files:
                 filesArr.extend(files.getlist(img))
                 
@@ -37,12 +41,6 @@ def alreadyExists(collection, title):
     else:
         return False
 
-ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-
 def upload_file(imgArr, folderName, prefix):
     fileNamesArr = []
     print("\n\n\n\n", "UPLOAD METHOD>>>>>")
@@ -50,10 +48,12 @@ def upload_file(imgArr, folderName, prefix):
         datetimestr = "{:%d%m%Y_%H%M%p}".format(datetime.now())
         filename = secure_filename(str(index)+'_'+prefix+'_'+datetimestr+'.'+filer.filename.rsplit('.', 1)[1])
         fileNamesArr.append(filename)
-        if filer and allowed_file(filer.filename):
+        isAllowedFile = '.' in filer.filename and filer.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        if filer and isAllowedFile:
             filer.save(os.path.join(folderName, filename))
     return fileNamesArr
 
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'gif'])
 def file_save(imgArr, folderName, prefix):
     fileNamesArr = []
     print("\n\n\n\n", "UPLOAD METHOD>>>>>")
@@ -61,7 +61,8 @@ def file_save(imgArr, folderName, prefix):
         datetimestr = "{:%d%m%Y_%H%M%p}".format(datetime.now())
         filename = secure_filename(str(index)+'_'+prefix+'_'+datetimestr+'.'+filer.filename.rsplit('.', 1)[1])
         fileNamesArr.append(filename)
-        if filer and allowed_file(filer.filename):
+        isAllowedFile = '.' in filer.filename and filer.filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+        if filer and isAllowedFile:
             filer.save(os.path.join(folderName, filename))
     return fileNamesArr
 

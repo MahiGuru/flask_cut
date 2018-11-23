@@ -82,6 +82,8 @@
     <script>
         function jajax(url, type, data, formSelector) {
             var data = data;
+            var contentT = false
+            var proccessData = false;
             if(formSelector){
                 data = new FormData();
 
@@ -103,12 +105,18 @@
                     
                 
                 });
+                contentT = false;
+                processData = false;
                 
+            }else{
+                contentT = "application/json";
+                processData = true;
+                data = JSON.stringify(data);
             }
             return $.ajax({
                 url: 'http://localhost:5000/' + url,
-                contentType: false,
-                processData: false,
+                contentType: contentT,
+                processData: processData,
                 method: type,
                 data: data
             }).done(function (data) {

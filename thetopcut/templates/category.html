@@ -38,8 +38,8 @@
             <div class="category row">
                 {% for category in categorys %}
                 <div class="col-lg-6 mb-3">
-                    <h1> {{ category.name }} {{ category.title }} </h1>
-                    <p> {{ category.description }} {{ category.desc }} </p>
+                    <h1> {{ category.name }} </h1>
+                    <p> {{ category.desc }} </p>
                     <p>
                         <button class="btn btn-danger delete_btn" data-id="{{category._id}}">DELETE</button>
                         <button class="btn btn-primary update_btn" data-id="{{category._id}}">Update</button>
@@ -58,23 +58,8 @@
 
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            /*var data = new FormData();
-
-            //Form data
-            var form_data = $('.form').serializeArray();
-            $.each(form_data, function (key, input) {
-                data.append(input.name, input.value);
-                console.log(data, input.name, input.value);
-            });
-
-            //File data
-            var file_data = $('input[name="images"]')[0].files;
-            for (var i = 0; i < file_data.length; i++) {
-                data.append("images", file_data[i]);
-            }*/
-            // console.log(data);
             jajax('api/categorys/', 'POST', {}, '.form').then(function () {
-                // window.location.href = "/category";
+                window.location.href = "/category";
             });
         })
         
@@ -87,7 +72,7 @@
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/categorys/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/categorys/' + id, 'PUT', { 'id': id, 'data': { name: value } })
         })
 
     });
