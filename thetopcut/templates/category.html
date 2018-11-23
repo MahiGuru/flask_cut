@@ -58,7 +58,7 @@
 
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            var data = new FormData();
+            /*var data = new FormData();
 
             //Form data
             var form_data = $('.form').serializeArray();
@@ -71,9 +71,9 @@
             var file_data = $('input[name="images"]')[0].files;
             for (var i = 0; i < file_data.length; i++) {
                 data.append("images", file_data[i]);
-            }
-            console.log(data);
-            jajax('api/categorys/', 'POST', data).then(function () {
+            }*/
+            // console.log(data);
+            jajax('api/categorys/', 'POST', {}, '.form').then(function () {
                 // window.location.href = "/category";
             });
         })

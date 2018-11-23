@@ -5,7 +5,7 @@ from thetopcut.database.db import col_category
 import os
 from flask import current_app as app
 from bson.objectid import ObjectId
-from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file, moved_file
+from thetopcut.utils.common_def import alreadyExists, allowed_file, upload_file, moved_file, upload_images
 from thetopcut.models.CategoryModel import CategoryModel
 
 class CategoryAPI(MethodView):
@@ -27,24 +27,28 @@ class CategoryAPI(MethodView):
         return jsonify(myArr)
     def post(self):
         print(os.getcwd())
-        upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
-        
-        if 'images' not in request.files:
-            return ''
-        category_folder = os.path.join(upload_folder, 'category')
-        '' if os.path.exists(category_folder) else os.makedirs(category_folder)
+        # upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
 
-        fileNamesArr = upload_file(request.files.getlist("images"), category_folder, 'cat')
+        # category_folder = os.path.join(upload_folder, 'category')
+        # '' if os.path.exists(category_folder) else os.makedirs(category_folder)
+        # for img in request.files:            
+        #     fileNamesArr = upload_file(request.files.getlist(img), category_folder, 'cat')
+
+        upload_files = upload_images(request.files, 'category', 'cat')
+
+        pprint.pprint(upload_files['folder'])
+        pprint.pprint(upload_files['fileArr'])
+        # fileNamesArr = upload_file(request.files.getlist("images"), category_folder, 'cat')
         checkExists = alreadyExists(col_category, request.form['type'])        
         if checkExists:
             print("Ooops you entered with same name")
         else:
             record = request.form
             print(record)
-            category_arr = CategoryModel(record['type'], record['desc'], fileNamesArr)
+            category_arr = CategoryModel(record['type'], record['desc'], upload_files['fileArr'])
             category = category_arr.to_document()
             insertedId = col_category.insert_one(category).inserted_id
-            moved_file(fileNamesArr, category_folder, str(insertedId)) 
+            moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
         return jsonify(str(insertedId))
 
     def delete(self, category_id=None):

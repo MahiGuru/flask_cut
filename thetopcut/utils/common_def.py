@@ -4,8 +4,31 @@ import datetime
 import shutil
 from datetime import datetime
 from werkzeug.utils import secure_filename
+from flask import current_app as app
 
 
+def upload_images(files, folder, prefix):
+        """    Below line will create uploads folder(e.g /categorys) """
+        upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
+        """    Below line will create folder(e.g /categorys) """
+        category_folder = os.path.join(upload_folder, folder)
+        '' if os.path.exists(category_folder) else os.makedirs(category_folder)
+        filesArr = []
+        """     request.files loop here
+                push every image object into filesArr
+        """
+        for img in files:
+                filesArr.extend(files.getlist(img))
+                
+        """     file_save method accepts all image objects as "list" and returns fileNames as array.
+                params expects folder name("like category_folder" and prefix)
+        """
+        fileNamesArr = file_save(filesArr, category_folder, prefix)
+
+        """     file_save method accepts all image objects as "list" and returns fileNames as array.
+                params expects folder name("like category_folder" and prefix)
+        """
+        return dict(folder = category_folder, fileArr = fileNamesArr)
 
 def alreadyExists(collection, title):
     print(collection.find({'title': { "$in": [title]}}).count())
@@ -20,9 +43,20 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
-
 def upload_file(imgArr, folderName, prefix):
     fileNamesArr = []
+    print("\n\n\n\n", "UPLOAD METHOD>>>>>")
+    for index, filer in enumerate(imgArr):
+        datetimestr = "{:%d%m%Y_%H%M%p}".format(datetime.now())
+        filename = secure_filename(str(index)+'_'+prefix+'_'+datetimestr+'.'+filer.filename.rsplit('.', 1)[1])
+        fileNamesArr.append(filename)
+        if filer and allowed_file(filer.filename):
+            filer.save(os.path.join(folderName, filename))
+    return fileNamesArr
+
+def file_save(imgArr, folderName, prefix):
+    fileNamesArr = []
+    print("\n\n\n\n", "UPLOAD METHOD>>>>>")
     for index, filer in enumerate(imgArr):
         datetimestr = "{:%d%m%Y_%H%M%p}".format(datetime.now())
         filename = secure_filename(str(index)+'_'+prefix+'_'+datetimestr+'.'+filer.filename.rsplit('.', 1)[1])
