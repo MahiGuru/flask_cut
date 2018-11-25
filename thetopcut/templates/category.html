@@ -1,8 +1,5 @@
 {% extends "base.html" %} {% block content %}
 
-<p>
-    <a href="/">Back to Home</a>
-</p>
 <h4>Category</h4>
 <form class="form">
 
@@ -51,18 +48,17 @@
         </div>
 
     </div>
- 
+
 </form>
 
 <script>
 
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            jajax('api/categorys/', 'POST', {}, '.form').then(function () {
+            jajax('api/categorys/', 'POST', {}, ".form").then(function () {
                 window.location.href = "/category";
             });
         })
-        
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             jajax('api/categorys/' + id, 'DELETE', { 'id': id }).then(function () {

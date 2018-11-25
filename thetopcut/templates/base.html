@@ -24,6 +24,9 @@
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
         crossorigin="anonymous"></script>
+    <script src="{{url_for('static', filename='scripts/jquery.serialize.object.js')}}"></script>
+    <script src="{{url_for('static', filename='scripts/main.js')}}"></script>
+
 
 
 </head>
@@ -80,53 +83,7 @@
 
     </main>
     <script>
-        function jajax(url, type, data, formSelector) {
-            var data = data;
-            var contentT = false
-            var proccessData = false;
-            if (formSelector) {
-                data = new FormData();
 
-                //Form data
-                var form_data = $(formSelector).serializeArray();
-                $.each(form_data, function (key, input) {
-                    data.append(input.name, input.value);
-                    console.log(input.name, input.value);
-                });
-
-                //File data
-                $(formSelector).find("input[type='file']").each(function (i, val) {
-                    var file_data = val.files;
-                    console.log(file_data, val);
-                    for (var i = 0; i < file_data.length; i++) {
-                        console.log("inside FOR file data >>>> ", file_data)
-                        data.append("images" + i, file_data[i]);
-                    }
-
-
-                });
-                contentT = false;
-                processData = false;
-
-            } else {
-                contentT = "application/json";
-                processData = true;
-                data = JSON.stringify(data);
-            }
-            return $.ajax({
-                url: 'http://localhost:5000/' + url,
-                contentType: contentT,
-                processData: processData,
-                method: type,
-                data: data
-            }).done(function (data) {
-                console.log('SUCCEEEEEEED', data);
-            }).fail(function (jqXHR, textStatus, err) {
-                console.log('Error: ' + err);
-            }).always(function () {
-                console.log('ALWAYS ');
-            });
-        }
     </script>
 </body>
 

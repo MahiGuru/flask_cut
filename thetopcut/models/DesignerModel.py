@@ -21,7 +21,7 @@ class DesignerModel(object):
 (default) created_date: current system date.
     """
 
-    def __init__(self, userid, name, desc, contactNumber, alternateNumber, address, landmark, pincode, locationObj, products, tailors, img):
+    def __init__(self, userid, name, desc, contactNumber, alternateNumber, address, landmark, pincode, locationObj, img):
         """Return a new Car object."""
         self.userid = userid
         self.name = name
@@ -32,8 +32,6 @@ class DesignerModel(object):
         self.landmark = landmark
         self.pincode = pincode
         self.location = locationObj
-        self.products = products
-        self.tailors = tailors
         self.img = img
         self.created_date = datetime.now().strftime('%Y-%m-%dT%H:%M:%S.%f')
     

@@ -19,7 +19,7 @@ class CategoryAPI(MethodView):
     def post(self):
         """ below code will move all the images to uploads/category folder with 'cat' prefix """
         upload_files = upload_images(request.files, 'category', 'cat')
-        record = request.form
+        record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         model_record = CategoryModel(record['type'], record['desc'], upload_files['fileArr'])
         """ Model converts to document like json object """
@@ -27,7 +27,8 @@ class CategoryAPI(MethodView):
         """ Below line will insert record and get objectID """
         insertedId = col_category.insert_one(record_document).inserted_id
         """ Below line does files move from one place to another """
-        moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
+        if len(upload_files['fileArr']) > 0:
+           moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId))
 
         return jsonify(str(insertedId))
 

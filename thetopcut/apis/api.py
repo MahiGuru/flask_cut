@@ -12,6 +12,10 @@ from thetopcut.views.BodyTypeAPI import BodyTypeAPI
 from thetopcut.views.ClothTypeAPI import ClothTypeAPI
 from thetopcut.views.OccassionTypeAPI import OccassionTypeAPI
 from thetopcut.views.ProductAPI import ProductAPI
+from thetopcut.views.UserAPI import UserAPI
+from thetopcut.views.TailorAPI import TailorAPI
+from thetopcut.views.DesignerAPI import DesignerAPI
+from thetopcut.views.ProductRelationAPI import ProductRelationAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
 
@@ -28,3 +32,7 @@ register_api(BodyTypeAPI, 'bodytype_api', '/bodytype/')
 register_api(ClothTypeAPI, 'clothtype_api', '/clothtype/')
 register_api(OccassionTypeAPI, 'occassiontype_api', '/occassiontype/')
 register_api(ProductAPI, 'products_api', '/products/')
+register_api(UserAPI, 'users_api', '/users/')
+register_api(TailorAPI, 'tailor_api', '/tailors/')
+register_api(DesignerAPI, 'designer_api', '/designers/')
+register_api(ProductRelationAPI, 'product_realtion_api', '/productrelations/')

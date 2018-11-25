@@ -21,7 +21,7 @@ class ClothTypeAPI(MethodView):
     def post(self):        
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """
         upload_files = upload_images(request.files, 'clothTypes', 'ct')
-        record = request.form
+        record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
         model_record = ClothTypeModel(record['type'], record['desc'], record['category'], upload_files['fileArr'])
@@ -30,7 +30,8 @@ class ClothTypeAPI(MethodView):
         """ Below line will insert record and get objectID """
         insertedId = col_clothType.insert_one(record_document).inserted_id
         """ Below line does files move from one place to another """
-        moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
+        if len(upload_files['fileArr']) > 0:
+           moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
 
         return jsonify(str(insertedId))
     

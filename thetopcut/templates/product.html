@@ -9,7 +9,7 @@
                     <div class="mb-3">
                         <label for="username">Product Name: </label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="type" name="name" placeholder="Product Name">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Product Name">
                         </div>
                     </div>
                     <div class="mb-3">
@@ -17,54 +17,71 @@
                         <textarea col="3" rows="3" class="form-control" id="description" name="desc" placeholder="Description"></textarea>
                     </div>
                     <div class="mb-3">
+                        <label for="designer">Categorys </label>
+                        {% for c in categorys %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="{{c._id}}" name="category[]">
+                            <label class="form-check-label" for="{{c._id}}">{{c.name}}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="mb-3">
                         <label for="designer">Designers </label>
                         <input type="text" class="form-control" id="designer" name="designer" placeholder="Description"
                             value="Mahipal" />
                     </div>
+                </div>
+                <div class="col-md-6">
                     <div class=" mb-3">
-                        <p for="frontType">Front View Types</p>
+                        <h6 for="frontType">Front View Types : </h6>
                         {% for c in frontTypes %}
                         <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="Check2" name="fronttype[]">
-                            <label class="form-check-label" for="Check1">{{c.type}}</label>
+                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="{{c._id}}" name="fronttype[]">
+                            <label class="form-check-label" for="{{c._id}}">{{c.type}}</label>
                         </div>
                         {% endfor %}
 
                     </div>
-                </div>
-                <div class="col-md-6">
+                    <hr />
+                    <div class=" mb-3">
+                        <h6 for="backType">Back View Types : </h6>
+                        {% for c in backTypes %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="{{c._id}}" name="backType[]">
+                            <label class="form-check-label" for="{{c._id}}">{{c.type}}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <hr />
+                    <div class=" mb-3">
+                        <h6 for="bodyType">Body Types : </h6>
 
-                    <div class=" mb-3">
-                        <label for="backType">Back View Types</label>
-                        <select class="custom-select d-block w-100" id="backType" name="backType[]">
-                            {% for c in backTypes %}
-                            <option value="{{ c._id }}">{{ c.type }}</option>
-                            {% endfor %}
-                        </select>
+                        {% for c in bodyTypes %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="{{c._id}}" name="bodyType[]">
+                            <label class="form-check-label" for="{{c._id}}">{{c.type}}</label>
+                        </div>
+                        {% endfor %}
                     </div>
+                    <hr />
                     <div class=" mb-3">
-                        <label for="bodyType">Body Types</label>
-                        <select class="custom-select d-block w-100" id="bodyType" name="bodyType[]">
-                            {% for c in bodyTypes %}
-                            <option value="{{ c._id }}">{{ c.type }}</option>
-                            {% endfor %}
-                        </select>
+                        <h6 for="clothType">Cloth Types : </h6>
+                        {% for c in clothTypes %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="{{c._id}}" name="clothType[]">
+                            <label class="form-check-label" for="{{c._id}}">{{c.type}}</label>
+                        </div>
+                        {% endfor %}
                     </div>
+                    <hr />
                     <div class=" mb-3">
-                        <label for="clothType">Cloth Types</label>
-                        <select class="custom-select d-block w-100" id="clothType" name="clothType[]">
-                            {% for c in clothTypes %}
-                            <option value="{{ c._id }}">{{ c.type }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class=" mb-3">
-                        <label for="occassionType">Occassion Types</label>
-                        <select class="custom-select d-block w-100" id="occassionType" name="occassionType[]">
-                            {% for c in occassionTypes %}
-                            <option value="{{ c._id }}">{{ c.type }}</option>
-                            {% endfor %}
-                        </select>
+                        <h6 for="occassionType">Occassion Types : </h6>
+                        {% for c in occassionTypes %}
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="{{c._id}}" id="{{c._id}}" name="occassionType[]">
+                            <label class="form-check-label" for="{{c._id}}">{{c.type}}</label>
+                        </div>
+                        {% endfor %}
                     </div>
 
                 </div>
@@ -107,7 +124,7 @@
 
         $(".create_btn").on("click", function () {
             jajax('api/products/', 'POST', {}, '.form').then(function () {
-                window.location.href = "/products";
+                //  window.location.href = "/products";
             });
         })
 

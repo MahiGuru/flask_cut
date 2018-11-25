@@ -15,10 +15,11 @@ class ProductModel(object):
 (default) created_date: current system date.
     """
 
-    def __init__(self, name, desc, designerId=None, frontTypes=[], backTypes=[], occassionTypes=[], clothTypes=[], bodyTypes=[], img=[]):
+    def __init__(self, name, desc, categorys=[], designerId=None, frontTypes=[], backTypes=[], occassionTypes=[], clothTypes=[], bodyTypes=[], img=[]):
         """Return a new Car object."""
         self.name = name
         self.desc = desc 
+        self.categorys = categorys
         self.designerId = designerId
         self.frontTypes = frontTypes 
         self.backTypes = backTypes

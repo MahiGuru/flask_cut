@@ -8,6 +8,9 @@ from flask import current_app as app
 
 
 def upload_images(files, folder, prefix):
+        print("REqUEST FILES ", request.files, len(request.files))
+        if(len(request.files) == 0):
+                return dict(folder = None, fileArr = [])
         """    Below line will create uploads folder(e.g /categorys) """
         upload_folder = os.path.join(os.path.dirname(__file__), '../'+app.config['UPLOAD_FOLDER'])
         
