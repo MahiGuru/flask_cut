@@ -61,20 +61,20 @@
 <script>
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            jajax('api/occassiontype/', 'POST', {}, '.form').then(function () {
+            jajax('api/occassiontypes/', 'POST', {}, '.form').then(function () {
                 window.location.href = "/occassiontype";
             });
         })
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
-            jajax('api/occassiontype/' + id, 'DELETE', { 'id': id }).then(function () {
+            jajax('api/occassiontypes/' + id, 'DELETE', { 'id': id }).then(function () {
                 window.location.href = "/occassiontype/";
             });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/occassiontype/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/occassiontypes/' + id, 'PUT', { 'id': id, 'data': { type: value } })
         })
 
     });

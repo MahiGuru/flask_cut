@@ -61,20 +61,20 @@
 <script>
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            jajax('api/clothtype/', 'POST', {}, '.form').then(function () {
+            jajax('api/clothtypes/', 'POST', {}, '.form').then(function () {
                 window.location.href = "/clothtype";
             });
         })
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
-            jajax('api/clothtype/' + id, 'DELETE', { 'id': id }).then(function () {
+            jajax('api/clothtypes/' + id, 'DELETE', { 'id': id }).then(function () {
                 window.location.href = "/clothtype/";
             });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/clothtype/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/clothtypes/' + id, 'PUT', { 'id': id, 'data': { type: value } })
         })
 
     });

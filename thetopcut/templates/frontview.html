@@ -61,21 +61,21 @@
 <script>
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            jajax('api/frontview/', 'POST', {}, '.form').then(function () {
+            jajax('api/frontviews/', 'POST', {}, '.form').then(function () {
                 window.location.href = "/frontview";
             });
         })
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             alert(id)
-            jajax('api/frontview/' + id, 'DELETE', { 'id': id }).then(function () {
+            jajax('api/frontviews/' + id, 'DELETE', { 'id': id }).then(function () {
                 window.location.href = "/frontview/";
             });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/frontview/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/frontviews/' + id, 'PUT', { 'id': id, 'data': { type: value } })
         })
 
     });

@@ -9,3 +9,9 @@ def get_records(collection, id):
         myArr.append(record)
 
     return jsonify(myArr)
+def get_all_records(collection):
+    pipeline = [
+        {"$unwind": "$categoryId"},
+        {"$group": {"_id": "$_id", "sum": {"$sum": "$categoryId"}}}
+    ]
+    cursor = collection.aggregate(pipeline)

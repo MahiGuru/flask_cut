@@ -61,7 +61,7 @@
 <script>
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            jajax('api/backview/', 'POST', {}, '.form').then(function () {
+            jajax('api/backviews/', 'POST', {}, '.form').then(function () {
                 window.location.href = "/backview";
             });
         })
@@ -69,14 +69,14 @@
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             alert(id)
-            jajax('api/backview/' + id, 'DELETE', { 'id': id }).then(function () {
+            jajax('api/backviews/' + id, 'DELETE', { 'id': id }).then(function () {
                 window.location.href = "/backview/";
             });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/backview/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/backviews/' + id, 'PUT', { 'id': id, 'data': { type: value } })
         })
 
     });

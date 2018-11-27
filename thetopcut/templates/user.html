@@ -1,0 +1,98 @@
+{% extends "base.html" %} {% block content %}
+
+<p>
+    <a href="/">Back to Home</a>
+</p>
+<h4>Add User</h4>
+<div class="row">
+    <div class="col-md-6 order-md-1">
+        <form class="form" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="username">Name</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="type" name="name" placeholder="FirstName lastName">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="password">Password</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="password" name="password" placeholder="FirstName lastName">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email">Email</label>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">@</span>
+                    </div>
+                    <input type="text" class="form-control" id="email" name="email" placeholder="Email Id">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="mobile">Mobile</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="mobile" name="mobile" placeholder="eg. 66645 55524">
+                </div>
+            </div> 
+            <div class=" mb-3">
+                <label for="userTypes">Running any Business <span class="text-muted">Please choose from below</span></label>
+                <select class="custom-select d-block w-100" id="userTypes" name="userTypes">
+                    {% for c in userTypes %}
+                    <option value="{{ c._id }}">{{ c.type }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="images">Upload Pictures<span class="text-muted">(Optional)</span></label>
+                <input type="file" id="images" name="images" class="form-control" multiple>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6"><button class="btn btn-primary create_btn" type="button">Submit</button></div>
+            </div>
+        </form>
+    </div>
+
+    <div class="col-md-6 order-md-1">
+         <div class="users">
+            {% for user in users %}
+            <div class="col-lg-6 mb-3">
+                <h1> {{ user.name }}</h1>
+                <p> {{ user.email }} </p>
+                <p>
+                    <button class="btn btn-danger delete_btn" data-id="{{user._id}}">DELETE</button>
+                    <button class="btn btn-primary update_btn" data-id="{{user._id}}">Update</button>
+                </p>
+                {% for img in user.img %}
+                <img src="/users/{{user._id}}/{{img}}" alt="{{img}} " height="150"> {% endfor %}
+            </div>{% endfor %}
+        </div>
+    </div>
+
+</div>
+
+<script>
+    $(document).ready(function () {
+        $(".create_btn").on("click", function () {
+            jajax('api/users/', 'POST', {}, '.form').then(function () {
+                window.location.href = "/user";
+            });
+        })
+        $(".delete_btn").on("click", function () {
+            id = $(this).attr('data-id');
+            alert(id)
+            jajax('api/users/' + id, 'DELETE', { 'id': id }).then(function () {
+                window.location.href = "/user/";
+            });
+        })
+        $(".update_btn").on("click", function () {
+            id = $(this).attr('data-id');
+            value = $("#type").val();
+            jajax('api/users/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+        })
+
+    });
+
+</script>
+
+
+{% endblock %}
