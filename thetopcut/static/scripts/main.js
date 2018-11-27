@@ -4,13 +4,13 @@ function prepare_formdata(formSelector) {
         //Form data
         var form_data = $(formSelector).serializeObject();
         console.log(form_data)
-        $.each(form_data, function (key, value) {
+        $.each(form_data, function(key, value) {
             console.log(key, value);
             data.append(key, value);
         });
 
         //File data
-        $(formSelector).find("input[type='file']").each(function (i, val) {
+        $(formSelector).find("input[type='file']").each(function(i, val) {
             var file_data = val.files;
             for (var i = 0; i < file_data.length; i++) {
                 data.append("images" + i, file_data[i]);
@@ -21,9 +21,11 @@ function prepare_formdata(formSelector) {
         return data = new FormData();
     }
 }
+
 function prepare_stringifyData(data) {
     return data = JSON.stringify(data);
 }
+
 function jajax(url, type, data, formSelector) {
     if (formSelector) {
         data = prepare_formdata(formSelector)
@@ -34,11 +36,11 @@ function jajax(url, type, data, formSelector) {
         processData: false,
         method: type,
         data: data
-    }).done(function (data) {
+    }).done(function(data) {
         console.log('SUCCEEEEEEED', data);
-    }).fail(function (jqXHR, textStatus, err) {
+    }).fail(function(jqXHR, textStatus, err) {
         console.log('Error: ' + err);
-    }).always(function () {
+    }).always(function() {
         console.log('ALWAYS ');
     });
 }
@@ -50,11 +52,11 @@ function ajax_data(url, method, data) {
         contentType: "application/json; charset=utf-8",
         method: method,
         data: data
-    }).done(function (data) {
+    }).done(function(data) {
         console.log('SUCCEEEEEEED', data);
-    }).fail(function (jqXHR, textStatus, err) {
+    }).fail(function(jqXHR, textStatus, err) {
         console.log('Error: ' + err);
-    }).always(function () {
+    }).always(function() {
         console.log('ALWAYS ');
     });
 }

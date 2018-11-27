@@ -11,7 +11,18 @@ from thetopcut.models.ProductModel import ProductModel
 from thetopcut.database.get_events import get_records
 from thetopcut.database.delete_events import delete_record
 from thetopcut.database.update_events import modify_record
+import re
 
+def splitToArrWithObjectId(str):
+    split_str = re.split(',', str)
+    str_list = []
+    for str in split_str:
+        str_list.append(ObjectId(str))
+    return str_list
+def propertyExists(obj, property):
+    myval =  obj[property] if obj is not None else []
+    print('\n\n\n\n', myval, '\n\n\n\n')
+    return myval
 
 class ProductAPI(MethodView):
 
@@ -24,13 +35,13 @@ class ProductAPI(MethodView):
         record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
-        category_objId= ObjectId(record['category'])
-        designer_objId= ObjectId(record['designer'])
-        fronttype_objId= ObjectId(record['fronttype'])
-        backType_objId= ObjectId(record['backType'])
-        occassionType_objId= ObjectId(record['occassionType'])
-        clothType_objId= ObjectId(record['clothType'])
-        bodyType_objId= ObjectId(record['bodyType'])
+        category_objId= splitToArrWithObjectId(propertyExists(record, 'category'))
+        designer_objId= record['designer']
+        fronttype_objId= splitToArrWithObjectId(record['fronttype'])
+        backType_objId= splitToArrWithObjectId(record['backType'])
+        occassionType_objId= splitToArrWithObjectId(record['occassionType'])
+        clothType_objId= splitToArrWithObjectId(record['clothType'])
+        bodyType_objId= splitToArrWithObjectId(record['bodyType'])
 
         model_record = ProductModel(
             record['name'], 
@@ -47,7 +58,8 @@ class ProductAPI(MethodView):
         """ Model converts to document like json object """
         record_document = model_record.to_document()
         """ Below line will insert record and get objectID """
-        insertedId = col_products.insert_one(record_document).inserted_id
+        insertedId = list()
+        #insertedId = col_products.insert_one(record_document).inserted_id
         """ Below line does files move from one place to another """
         if len(upload_files['fileArr']) > 0:
            moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
