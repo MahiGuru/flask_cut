@@ -15,7 +15,22 @@ from thetopcut.database.update_events import modify_record
 class FrontViewTypeAPI(MethodView):
 
     def get(self, _id=None):
-        return get_records(col_frontViewType, _id)
+        pipeline = [
+            {
+                "$lookup": {
+                    "from": "categorys",
+                    "localField": "_id",
+                    "foreignField": 'categoryId',
+                    "as": "categorys"
+                }
+            },
+            { "$unwind": { "path": "$categorys", "preserveNullAndEmptyArrays": True } },
+            {"$group": {"_id": "$_id", 'categoryId' :  {"$first":'$categoryId'}, 'categorys' : {"$first":'$categorys'}}}
+        ]
+        cursor = col_frontViewType.aggregate(pipeline)
+        pprint.pprint(list(cursor))
+        # return jsonify([])
+        return get_records(col_frontViewType, _id, 'categoryId')
 
     def post(self):
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """
@@ -23,7 +38,8 @@ class FrontViewTypeAPI(MethodView):
         record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
-        model_record = FrontViewModel(record['type'], record['desc'], record['category'], upload_files['fileArr'])
+        recordCat= ObjectId(record['category'])
+        model_record = FrontViewModel(record['type'], record['desc'], recordCat, upload_files['fileArr'])
         """ Model converts to document like json object """
         record_document = model_record.to_document()
         """ Below line will insert record and get objectID """
@@ -31,7 +47,7 @@ class FrontViewTypeAPI(MethodView):
         """ Below line does files move from one place to another """
         if len(upload_files['fileArr']) > 0:
            moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 
-
+        print(insertedId, '\n\n\n\n\n')
         return jsonify(str(insertedId))
 
     def delete(self, _id=None):

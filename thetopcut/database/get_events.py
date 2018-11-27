@@ -1,11 +1,13 @@
 from flask import jsonify, request
 from bson.objectid import ObjectId
 
-def get_records(collection, id):
+def get_records(collection, id, relationId = None):
     myArr = []
     findObj = {"_id": ObjectId(id)} if id is not None else {}
     for record in collection.find(findObj):
         record['_id'] = str(record['_id'])
+        if relationId is not None:
+            record[relationId] = str(record[relationId])
         myArr.append(record)
 
     return jsonify(myArr)

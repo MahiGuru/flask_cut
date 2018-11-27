@@ -24,16 +24,24 @@ class ProductAPI(MethodView):
         record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
+        category_objId= ObjectId(record['category'])
+        designer_objId= ObjectId(record['designer'])
+        fronttype_objId= ObjectId(record['fronttype'])
+        backType_objId= ObjectId(record['backType'])
+        occassionType_objId= ObjectId(record['occassionType'])
+        clothType_objId= ObjectId(record['clothType'])
+        bodyType_objId= ObjectId(record['bodyType'])
+
         model_record = ProductModel(
             record['name'], 
             record['desc'], 
-            record['category'], 
-            record['designer'], 
-            record['fronttype'], 
-            record['backType'], 
-            record['occassionType'], 
-            record['clothType'],
-            record['bodyType'],  
+            category_objId, 
+            designer_objId, 
+            fronttype_objId, 
+            backType_objId, 
+            occassionType_objId, 
+            clothType_objId,
+            bodyType_objId,  
             upload_files['fileArr']
         )
         """ Model converts to document like json object """

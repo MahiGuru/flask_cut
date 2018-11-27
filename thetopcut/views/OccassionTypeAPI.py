@@ -16,7 +16,7 @@ from thetopcut.database.update_events import modify_record
 class OccassionTypeAPI(MethodView):
 
     def get(self, _id=None):
-        return get_records(col_occassionType, _id)
+        return get_records(col_occassionType, _id, 'categoryId')
 
     def post(self):
         
@@ -25,6 +25,7 @@ class OccassionTypeAPI(MethodView):
         record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
+        recordCat= ObjectId(record['category'])
         model_record = OccassionTypeModel(record['type'], record['desc'], record['category'], upload_files['fileArr'])
         """ Model converts to document like json object """
         record_document = model_record.to_document()
