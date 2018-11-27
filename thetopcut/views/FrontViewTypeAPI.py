@@ -19,8 +19,8 @@ class FrontViewTypeAPI(MethodView):
             {
                 "$lookup": {
                     "from": "categorys",
-                    "localField": "_id",
-                    "foreignField": 'categoryId',
+                    "localField": "categoryId",
+                    "foreignField": '_id',
                     "as": "categorys"
                 }
             },
