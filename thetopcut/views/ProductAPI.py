@@ -13,16 +13,13 @@ from thetopcut.database.delete_events import delete_record
 from thetopcut.database.update_events import modify_record
 import re
 
-def splitToArrWithObjectId(str):
-    split_str = re.split(',', str)
+def splitToArrWithObjectId(str_val):
     str_list = []
-    for str in split_str:
-        str_list.append(ObjectId(str))
+    if str_val is not None:
+        split_str = re.split(',', str_val)
+        for str_val in split_str:
+            str_list.append(ObjectId(str_val))        
     return str_list
-def propertyExists(obj, property):
-    myval =  obj[property] if obj is not None else []
-    print('\n\n\n\n', myval, '\n\n\n\n')
-    return myval
 
 class ProductAPI(MethodView):
 
@@ -35,13 +32,16 @@ class ProductAPI(MethodView):
         record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
-        category_objId= splitToArrWithObjectId(propertyExists(record, 'category'))
+        print('category' in record, hasattr(record, 'category'))
+        print(hasattr(record, 'fronttype'))
+        category_objId= splitToArrWithObjectId(record['category'] if 'category' in record else None)
         designer_objId= record['designer']
-        fronttype_objId= splitToArrWithObjectId(record['fronttype'])
-        backType_objId= splitToArrWithObjectId(record['backType'])
-        occassionType_objId= splitToArrWithObjectId(record['occassionType'])
-        clothType_objId= splitToArrWithObjectId(record['clothType'])
-        bodyType_objId= splitToArrWithObjectId(record['bodyType'])
+        fronttype_objId= splitToArrWithObjectId(record['fronttype'] if 'fronttype' in record else None)
+        backType_objId= splitToArrWithObjectId(record['backType'] if 'backType' in record else None)
+        occassionType_objId= splitToArrWithObjectId(record['occassionType'] if 'occassionType' in record else None)
+        clothType_objId= splitToArrWithObjectId(record['clothType'] if 'clothType' in record else None)
+        bodyType_objId= splitToArrWithObjectId(record['bodyType'] if 'bodyType' in record else None)
+        
 
         model_record = ProductModel(
             record['name'], 
@@ -57,6 +57,8 @@ class ProductAPI(MethodView):
         )
         """ Model converts to document like json object """
         record_document = model_record.to_document()
+        
+        print('\n\n\n\n', record_document)
         """ Below line will insert record and get objectID """
         insertedId = list()
         #insertedId = col_products.insert_one(record_document).inserted_id
