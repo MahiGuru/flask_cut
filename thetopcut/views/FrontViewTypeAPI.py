@@ -30,7 +30,7 @@ class FrontViewTypeAPI(MethodView):
         cursor = col_frontViewType.aggregate(pipeline)
         pprint.pprint(list(cursor))
         # return jsonify([])
-        return get_records(col_frontViewType, _id, 'categoryId')
+        return get_records(col_frontViewType, _id, ['categoryId'])
 
     def post(self):
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """

@@ -16,7 +16,7 @@ from thetopcut.database.update_events import modify_record
 class ClothTypeAPI(MethodView):
 
     def get(self, _id=None):
-        return get_records(col_clothType, _id, 'categoryId')
+        return get_records(col_clothType, _id, ['categoryId'])
 
     def post(self):        
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """

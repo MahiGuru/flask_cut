@@ -8,7 +8,7 @@ from bson.objectid import ObjectId
 from thetopcut.utils.common_def import alreadyExists, upload_images, moved_file
 from thetopcut.models.ProductModel import ProductModel
 
-from thetopcut.database.get_events import get_records
+from thetopcut.database.get_events import get_records, get_all_records
 from thetopcut.database.delete_events import delete_record
 from thetopcut.database.update_events import modify_record
 import re
@@ -24,28 +24,29 @@ def splitToArrWithObjectId(str_val):
 class ProductAPI(MethodView):
 
     def get(self, _id=None):
-        return get_records(col_products, _id)
+        # return get_records(col_products, _id, ['categorys', 'designerId', 'frontTypes', 'backTypes', 
+        # 'occassionTypes', 'clothTypes', 'bodyTypes'])
+        return get_all_records(col_products)
         
     def post(self):        
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """
         upload_files = upload_images(request.files, 'products', 'pds')
         record = request.json if request.content_type == 'application/json' else request.form
-        """ Values assign to Category Model """
+        """ Values assign to Category Model and also check the keys"""
         pprint.pprint(record)
-        print('category' in record, hasattr(record, 'category'))
-        print(hasattr(record, 'fronttype'))
+        name = record['name'] if 'name' in record else ''
+        desc = record['desc'] if 'desc' in record else ''
         category_objId= splitToArrWithObjectId(record['category'] if 'category' in record else None)
-        designer_objId= record['designer']
+        designer_objId= splitToArrWithObjectId(record['designer'] if 'designer' in record else None)
         fronttype_objId= splitToArrWithObjectId(record['fronttype'] if 'fronttype' in record else None)
         backType_objId= splitToArrWithObjectId(record['backType'] if 'backType' in record else None)
         occassionType_objId= splitToArrWithObjectId(record['occassionType'] if 'occassionType' in record else None)
         clothType_objId= splitToArrWithObjectId(record['clothType'] if 'clothType' in record else None)
-        bodyType_objId= splitToArrWithObjectId(record['bodyType'] if 'bodyType' in record else None)
-        
+        bodyType_objId= splitToArrWithObjectId(record['bodyType'] if 'bodyType' in record else None)        
 
         model_record = ProductModel(
-            record['name'], 
-            record['desc'], 
+            name, 
+            desc, 
             category_objId, 
             designer_objId, 
             fronttype_objId, 
@@ -57,11 +58,8 @@ class ProductAPI(MethodView):
         )
         """ Model converts to document like json object """
         record_document = model_record.to_document()
-        
-        print('\n\n\n\n', record_document)
         """ Below line will insert record and get objectID """
-        insertedId = list()
-        #insertedId = col_products.insert_one(record_document).inserted_id
+        insertedId = col_products.insert_one(record_document).inserted_id
         """ Below line does files move from one place to another """
         if len(upload_files['fileArr']) > 0:
            moved_file(upload_files['fileArr'], upload_files['folder'], str(insertedId)) 

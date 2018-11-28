@@ -16,7 +16,7 @@ from thetopcut.database.update_events import modify_record
 class OccassionTypeAPI(MethodView):
 
     def get(self, _id=None):
-        return get_records(col_occassionType, _id, 'categoryId')
+        return get_records(col_occassionType, _id, ['categoryId'])
 
     def post(self):
         

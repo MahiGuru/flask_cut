@@ -16,7 +16,7 @@ class BackViewTypeAPI(MethodView):
 
    
     def get(self, _id=None):
-        return get_records(col_backViewType, _id, 'categoryId')
+        return get_records(col_backViewType, _id, ['categoryId'])
 
     def post(self):        
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """
