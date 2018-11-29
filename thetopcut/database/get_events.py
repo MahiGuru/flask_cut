@@ -3,6 +3,8 @@ from bson.objectid import ObjectId
 import pprint
 from bson import json_util
 from bson.json_util import dumps
+import json
+
 
 def get_records(collection, id, relationId = []):
     myArr = []
@@ -16,8 +18,12 @@ def get_records(collection, id, relationId = []):
         myArr.append(record)
 
     return jsonify(myArr)
-def get_all_records(collection):
+
+
+def get_all_records(collection, id):
+    findObj = {"_id": ObjectId(id)} if id is not None else {}
     pipeline = [
+            { "$match": findObj },
             { "$unwind": { "path": "$categorys", "preserveNullAndEmptyArrays": True } },
             {
                 "$lookup": {
@@ -83,18 +89,19 @@ def get_all_records(collection):
                    "_id": "$_id", 
                    "name": {"$first": "$name"},
                    "desc": {"$first": "$desc"},
-                    'categorys' : {"$push":'$categorys_obj'},
-                    'frontTypes' : {"$push":'$frontType_obj'},
-                    'backTypes' : {"$push":'$backType_obj'},
-                    'occassionTypes' : {"$push":'$occassionType_obj'},
-                    'clothTypes' : {"$push":'$clothType_obj'},
-                    'bodyTypes' : {"$push":'$bodyType_obj'}
-                
-                
+                   'categorys' : {"$push":'$categorys_obj'},
+                   'frontTypes' : {"$push":'$frontType_obj'},
+                   'backTypes' : {"$push":'$backType_obj'},
+                   'occassionTypes' : {"$push":'$occassionType_obj'},
+                   'clothTypes' : {"$push":'$clothType_obj'},
+                   'bodyTypes' : {"$push":'$bodyType_obj'}
                 }
             }
         ]
     cursor = collection.aggregate(pipeline)
-    for result in cursor: 
-        myresult = result 
-    return dumps(myresult)
+    print(cursor)
+    myresult = []
+    for result in cursor:
+        myresult.append(result)
+    res = JSONEncoder().encode(myresult)
+    return jsonify(json.loads(res))

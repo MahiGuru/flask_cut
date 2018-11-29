@@ -24,9 +24,8 @@ def splitToArrWithObjectId(str_val):
 class ProductAPI(MethodView):
 
     def get(self, _id=None):
-        # return get_records(col_products, _id, ['categorys', 'designerId', 'frontTypes', 'backTypes', 
-        # 'occassionTypes', 'clothTypes', 'bodyTypes'])
-        return get_all_records(col_products)
+        return get_records(col_products, _id, ['categorys', 'designerId', 'frontTypes', 'backTypes', 
+        'occassionTypes', 'clothTypes', 'bodyTypes'])
         
     def post(self):        
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """
