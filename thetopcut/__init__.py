@@ -29,6 +29,9 @@ def create_app(test_config=None):
     from thetopcut.views.ui_views.clothtype_ui_route import clothtype_ui
     from thetopcut.views.ui_views.occassiontype_ui_route import occassiontype_ui
     from thetopcut.views.ui_views.product_ui_route import product_ui
+    from thetopcut.views.ui_views.user_ui_route import user_ui
+    from thetopcut.views.ui_views.tailor_ui_route import tailor_ui
+    from thetopcut.views.ui_views.designer_ui_route import designer_ui
     # from thetopcut.groups_api import groups
     app.register_blueprint(api)
     app.register_blueprint(category_ui)
@@ -38,6 +41,9 @@ def create_app(test_config=None):
     app.register_blueprint(clothtype_ui)
     app.register_blueprint(occassiontype_ui)
     app.register_blueprint(product_ui)
+    app.register_blueprint(user_ui)
+    app.register_blueprint(tailor_ui)
+    app.register_blueprint(designer_ui)
     
     # IMAGE Display Route @ UI
     @app.route('/')  

@@ -20,22 +20,22 @@ class DesignerAPI(MethodView):
         
     def post(self):        
         """ below code will move all the images to uploads/category folder with 'fvt' prefix """
-        upload_files = upload_images(request.files, 'designers', 'tailor')
+        upload_files = upload_images(request.files, 'designers', 'designer')
         record = request.json if request.content_type == 'application/json' else request.form
         """ Values assign to Category Model """
         pprint.pprint(record)
         #userid, name, desc, contactNumber, alternateNumber, address, landmark, 
         # pincode, locationObj, products, tailors, img
         model_record = DesignerModel(
-            record['user'], 
+            record['user'] if 'user' in record else None, 
             record['name'], 
-            record['desc'], 
-            record['contactNumber'], 
-            record['alternateNumber'], 
-            record['address'],
+            record['desc'] if 'desc' in record else None,
+            record['contactNumber'],
+            record['alternateNumber'] if 'alternateNumber' in record else None, 
+            record['address'] if 'address' in record else None, 
+            record['landmark'] if 'landmark' in record else None, 
             record['pincode'],
-            record['landmark'],
-            record['locationObj'],
+            record['locationObj'] if 'locationObj' in record else None,
             upload_files['fileArr']
         )
         """ Model converts to document like json object """

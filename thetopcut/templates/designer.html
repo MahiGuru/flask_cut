@@ -24,37 +24,38 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="contactNumber" name="contactNumber" placeholder="eg. 66645 23344">
                 </div>
-            </div> 
+            </div>
             <div class="mb-3">
                 <label for="anotherContactNumber">Another Contact Number</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="anotherContactNumber" name="anotherContactNumber" placeholder="eg. 66645 55524">
+                    <input type="text" class="form-control" id="anotherContactNumber" name="anotherContactNumber"
+                        placeholder="eg. 66645 55524">
                 </div>
-            </div> 
+            </div>
             <div class="mb-3">
                 <label for="address">Address</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="address" name="address" placeholder="Address">
                 </div>
-            </div> 
+            </div>
             <div class="mb-3">
                 <label for="landmark">Landmark</label>
                 <div class="input-group">
                     <input type="text" class="form-control" id="landmark" name="landmark" placeholder="eg. 66645 55524">
                 </div>
-            </div> 
+            </div>
             <div class="mb-3">
                 <label for="pin">Pin Code</label>
                 <div class="input-group">
-                    <input type="text" class="form-control" id="pin" name="pin" placeholder="eg. 66645 55524">
+                    <input type="text" class="form-control" id="pincode" name="pincode" placeholder="eg. 66645 55524">
                 </div>
-            </div> 
+            </div>
             <div class="mb-3">
                 <label for="pin">Choose from Map</label>
                 <div class="input-group">
-                    <button class="btn btn-danger location_address_btn" >Locate Address</button>                    
+                    <button class="btn btn-danger location_address_btn">Locate Address</button>
                 </div>
-            </div> 
+            </div>
             <div class="mb-3">
                 <label for="images">Upload Pictures<span class="text-muted">(Optional)</span></label>
                 <input type="file" id="images" name="images" class="form-control" multiple>
@@ -66,7 +67,7 @@
     </div>
 
     <div class="col-md-6 order-md-1">
-         <div class="designers">
+        <div class="designers">
             {% for designer in designers %}
             <div class="col-lg-6 mb-3">
                 <h1> {{ designer.name }}</h1>
@@ -86,25 +87,31 @@
 <script>
     $(document).ready(function () {
         $(".create_btn").on("click", function () {
-            jajax('api/tailors/', 'POST', {}, '.form').then(function () {
-                window.location.href = "/tailor";
+            jajax('api/designers/', 'POST', {}, '.form').then(function () {
+                window.location.href = "/designers";
             });
         })
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             alert(id)
-            jajax('api/tailors/' + id, 'DELETE', { 'id': id }).then(function () {
-                window.location.href = "/tailor/";
+            jajax('api/designers/' + id, 'DELETE', {
+                'id': id
+            }).then(function () {
+                window.location.href = "/designers/";
             });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/tailors/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/designers/' + id, 'PUT', {
+                'id': id,
+                'data': {
+                    type: value
+                }
+            })
         })
 
     });
-
 </script>
 
 

@@ -27,15 +27,15 @@ class TailorAPI(MethodView):
         #userid, name, desc, contactNumber, alternateNumber, address, 
         # landmark, pincode, locationObj, img
         model_record = TailorModel(
-            record['user'], 
+            record['user'] if 'user' in record else None, 
             record['name'], 
-            record['desc'], 
-            record['contactNumber'], 
-            record['alternateNumber'], 
-            record['address'],
-            record['landmark'],
+            record['desc'] if 'desc' in record else None,
+            record['contactNumber'],
+            record['alternateNumber'] if 'alternateNumber' in record else None, 
+            record['address'] if 'address' in record else None, 
+            record['landmark'] if 'landmark' in record else None, 
             record['pincode'],
-            record['locationObj'],
+            record['locationObj'] if 'locationObj' in record else None, 
             upload_files['fileArr']
         )
         """ Model converts to document like json object """

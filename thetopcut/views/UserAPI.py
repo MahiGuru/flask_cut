@@ -27,9 +27,9 @@ class UserAPI(MethodView):
         model_record = UserModel(
             record['name'], 
             record['password'], 
-            record['email'], 
-            record['mobile'], 
-            record['userType'],
+            record['email'],
+            record['mobile'] if 'mobile' in record else None, 
+            record['userType'] if 'userType' in record else None,
             upload_files['fileArr']
         )
         """ Model converts to document like json object """

@@ -33,7 +33,7 @@
                 <div class="input-group">
                     <input type="text" class="form-control" id="mobile" name="mobile" placeholder="eg. 66645 55524">
                 </div>
-            </div> 
+            </div>
             <div class=" mb-3">
                 <label for="userTypes">Running any Business <span class="text-muted">Please choose from below</span></label>
                 <select class="custom-select d-block w-100" id="userTypes" name="userTypes">
@@ -53,7 +53,7 @@
     </div>
 
     <div class="col-md-6 order-md-1">
-         <div class="users">
+        <div class="users">
             {% for user in users %}
             <div class="col-lg-6 mb-3">
                 <h1> {{ user.name }}</h1>
@@ -80,18 +80,24 @@
         $(".delete_btn").on("click", function () {
             id = $(this).attr('data-id');
             alert(id)
-            jajax('api/users/' + id, 'DELETE', { 'id': id }).then(function () {
+            jajax('api/users/' + id, 'DELETE', {
+                'id': id
+            }).then(function () {
                 window.location.href = "/user/";
             });
         })
         $(".update_btn").on("click", function () {
             id = $(this).attr('data-id');
             value = $("#type").val();
-            jajax('api/users/' + id, 'PUT', { 'id': id, 'data': { type: value } })
+            jajax('api/users/' + id, 'PUT', {
+                'id': id,
+                'data': {
+                    type: value
+                }
+            })
         })
 
     });
-
 </script>
 
 

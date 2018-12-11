@@ -15,7 +15,8 @@ from thetopcut.views.ProductAPI import ProductAPI
 from thetopcut.views.UserAPI import UserAPI
 from thetopcut.views.TailorAPI import TailorAPI
 from thetopcut.views.DesignerAPI import DesignerAPI
-from thetopcut.views.ProductRelationAPI import ProductRelationAPI
+from thetopcut.views.TailorProductRelationAPI import TailorProductRelationAPI
+from thetopcut.views.DesignerProductRelationAPI import DesignerProductRelationAPI
 from thetopcut.views.ProductWithTypesAPI import ProductWithTypesAPI
 
 api = Blueprint('api', __name__, url_prefix='/api')
@@ -37,4 +38,5 @@ register_api(ProductWithTypesAPI, 'products_types_api', '/allproducts/')
 register_api(UserAPI, 'users_api', '/users/')
 register_api(TailorAPI, 'tailor_api', '/tailors/')
 register_api(DesignerAPI, 'designer_api', '/designers/')
-register_api(ProductRelationAPI, 'product_realtion_api', '/productrelations/')
+register_api(TailorProductRelationAPI, 'tailor_product_realtion_api', '/tailorproducts/')
+register_api(DesignerProductRelationAPI, 'designer_product_realtion_api', '/designerproducts/')
