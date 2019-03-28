@@ -1,29 +1,20 @@
-# Python support can be specified down to the minor or micro version
-# (e.g. 3.6 or 3.6.3).
-# OS Support also exists for jessie & stretch (slim and full).
-# See https://hub.docker.com/r/library/python/ for all supported Python
-# tags from Docker Hub.
-FROM python:alpine
+FROM ubuntu:latest
+MAINTAINER Mahipal Guru "mahi6535@gmail.com"
+RUN apt-get update -y
+RUN apt-get install -y python-pip python-dev build-essential
 
-# If you prefer miniconda:
-#FROM continuumio/miniconda3
+WORKDIR ./app
 
-LABEL Name=flask_cut Version=0.0.1
-EXPOSE 3000
+COPY . ./app
+ENV HOME=/app
 
-ADD . /app
-WORKDIR /app
+# Copy the requirements file in order to install
+# Python dependencies
+COPY requirements.txt .
 
+RUN pip install -r requirements.txt
 
-# Using pip:
-RUN python3 -m pip install -r requirements.txt
-CMD ["python", "app.py"]
+EXPOSE 5000
+ENTRYPOINT ["python"]
 
-# Using pipenv:
-#RUN python3 -m pip install pipenv
-#RUN pipenv install --ignore-pipfile
-#CMD ["pipenv", "run", "python3", "-m", "flask_cut"]
-
-# Using miniconda (make sure to replace 'myenv' w/ your environment name):
-#RUN conda env create -f environment.yml
-#CMD /bin/bash -c "source activate myenv && python3 -m flask_cut"
+CMD ["run.py"]

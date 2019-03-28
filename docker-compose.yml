@@ -1,19 +1,11 @@
-version: '2.1'
 
-services:
-  web:
-    image: flask_cut
-    build: .
-    volumes:
-      - .:/app
-    ports:
-      - 3000:3000
-    links:
-      - mongodb
-    depends_on:
-      - mongodb
-  
-  mongodb:
-    image: mongo:latest
-    ports:
-      - 27017:27017
+web:
+  build: ./
+  ports:
+    - "5000:5000"
+  volumes:
+    - .:/app
+  links:
+    - db
+db:
+  image: mongo:3.0.2
