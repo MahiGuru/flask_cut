@@ -1,7 +1,10 @@
+import os
 from bson.objectid import ObjectId
 from pymongo import MongoClient
 
-client = MongoClient('mongodb://localhost:27017/')
+client = MongoClient(
+    os.environ['DB_PORT_27017_TCP_ADDR'],
+    27017)
 # client = MongoClient('mongodb://mongodb:27017/')
 db = client.flaskCut
 # listout all collections

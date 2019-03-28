@@ -20,18 +20,19 @@ def create_app(test_config=None):
         pass 
     # from thetopcut.database.db import db
     # print('\n\n\n\n')
+    print(os.environ)
     # print(db.category.find())
-    from thetopcut.apis.api import api
-    from thetopcut.views.ui_views.category_ui_route import category_ui
-    from thetopcut.views.ui_views.frontview_ui_route import frontview_ui
-    from thetopcut.views.ui_views.backview_ui_route import backview_ui
-    from thetopcut.views.ui_views.bodytype_ui_route import bodytype_ui
-    from thetopcut.views.ui_views.clothtype_ui_route import clothtype_ui
-    from thetopcut.views.ui_views.occassiontype_ui_route import occassiontype_ui
-    from thetopcut.views.ui_views.product_ui_route import product_ui
-    from thetopcut.views.ui_views.user_ui_route import user_ui
-    from thetopcut.views.ui_views.tailor_ui_route import tailor_ui
-    from thetopcut.views.ui_views.designer_ui_route import designer_ui
+    from .apis.api import api
+    from .views.ui_views.category_ui_route import category_ui
+    from .views.ui_views.frontview_ui_route import frontview_ui
+    from .views.ui_views.backview_ui_route import backview_ui
+    from .views.ui_views.bodytype_ui_route import bodytype_ui
+    from .views.ui_views.clothtype_ui_route import clothtype_ui
+    from .views.ui_views.occassiontype_ui_route import occassiontype_ui
+    from .views.ui_views.product_ui_route import product_ui
+    from .views.ui_views.user_ui_route import user_ui
+    from .views.ui_views.tailor_ui_route import tailor_ui
+    from .views.ui_views.designer_ui_route import designer_ui
     # from thetopcut.groups_api import groups
     app.register_blueprint(api)
     app.register_blueprint(category_ui)
