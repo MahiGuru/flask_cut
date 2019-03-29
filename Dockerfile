@@ -7,7 +7,7 @@ WORKDIR ./app
 
 COPY . ./app
 ENV HOME=/app
-
+ADD . .
 # Copy the requirements file in order to install
 # Python dependencies
 COPY requirements.txt .
